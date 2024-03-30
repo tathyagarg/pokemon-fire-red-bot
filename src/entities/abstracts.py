@@ -9,7 +9,7 @@ class Stat(enum.Enum):
     SPEED = 5
 
 class StatsList:
-    def __init__(self, hp, attack, defense, special_attack, special_defense, speed) -> None:
+    def __init__(self, hp: int, attack: int, defense: int, special_attack: int, special_defense: int, speed: int) -> None:
         self.hp = hp
         self.attack = attack
         self.defense = defense
@@ -56,4 +56,3 @@ class Ability:
 class LevelingRate:
     def __init__(self) -> None:
         pass
-    

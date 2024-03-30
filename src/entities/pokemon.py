@@ -1,6 +1,7 @@
 import move
 import abstracts
 import data
+import random
 
 class Pokemon:  # Parent
     def __init__(
@@ -46,8 +47,14 @@ class PokemonInstance:
             self,
             parent: Pokemon,
             nick: str,
-            level: int
+            level: int,
+            nature: abstracts.Nature,
+            ivs: abstracts.StatsList = None,
+            evs: abstracts.StatsList = None
     ) -> None:
         self.instance_of = parent
         self.nick = nick
         self.level = level
+        self.nature = nature
+        self.ivs = ivs or abstracts.StatsList(*random.choices(range(1, 32), k=6))
+        self.evs = evs or abstracts.StatsList(*[0 for _ in range(6)])

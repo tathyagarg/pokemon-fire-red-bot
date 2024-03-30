@@ -14,7 +14,7 @@ class Pokemon:  # Parent
             leveling_rate: abstracts.LevelingRate,
             ev_yield: abstracts.StatsList,
             base_stats: abstracts.StatsList,
-            move_list: list[move.Move],
+            learnset: list[move.Move],
             evolution,
             evolution_condition  # Callable
     ) -> None:
@@ -35,7 +35,7 @@ class Pokemon:  # Parent
         self.ev_yield = ev_yield
 
         self.base_stats = base_stats
-        self.move_list = move_list
+        self.learnset = learnset
 
         self.evolution: Pokemon = evolution
         self.evolution_condition = evolution_condition

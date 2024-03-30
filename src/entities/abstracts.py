@@ -31,6 +31,11 @@ class Type(enum.Enum):
     def __str__(self) -> str:
         return self.name
 
+class MoveCategory(enum.Enum):
+    PHYSICAL = 0
+    SPECIAL = 1
+    STATUS = 2
+
 class Ability:
     def __init__(self) -> None:
         ...

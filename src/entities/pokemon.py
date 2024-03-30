@@ -1,5 +1,6 @@
 import move
 import abstracts
+import data
 
 class Pokemon:  # Parent
     def __init__(
@@ -22,7 +23,7 @@ class Pokemon:  # Parent
         self.pokedex_number = pokedex_number
 
         self.typing = self.primary_type, self.secondary_type = typing
-        self.matchup = abstracts.COMBOS[
+        self.matchup = data.COMBOS[
             str(self.primary_type), str(self.secondary_type)
         ]
 
@@ -39,3 +40,14 @@ class Pokemon:  # Parent
 
         self.evolution: Pokemon = evolution
         self.evolution_condition = evolution_condition
+
+class PokemonInstance:
+    def __init__(
+            self,
+            parent: Pokemon,
+            nick: str,
+            level: int
+    ) -> None:
+        self.instance_of = parent
+        self.nick = nick
+        self.level = level

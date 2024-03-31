@@ -49,9 +49,20 @@ class Nature:
         self.up_stat = up_stat
         self.down_stat = down_stat
 
+    def multiplier_on(self, stat):
+        if self.up_stat == self.down_stat:
+            return 1
+        elif stat == self.up_stat:
+            return 1.1
+        elif stat == self.down_stat:
+            return 0.9
+        else:
+            return 1
+
 class Ability:
-    def __init__(self) -> None:
-        ...
+    def __init__(self, name, effect) -> None:
+        self.name = name
+        self.effect = effect
 
 class LevelingRate:
     def __init__(self) -> None:

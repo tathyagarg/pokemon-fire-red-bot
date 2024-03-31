@@ -1,4 +1,4 @@
-from abstracts import Type, Stat, Nature
+from abstracts import Type, Stat, Nature, Ability
 
 HARDY   = Nature(Stat.ATTACK, Stat.ATTACK)
 LONELY  = Nature(Stat.ATTACK, Stat.DEFENSE)
@@ -25,6 +25,9 @@ GENTLE  = Nature(Stat.SPECIAL_DEFENSE, Stat.DEFENSE)
 SASSY   = Nature(Stat.SPECIAL_DEFENSE, Stat.SPEED)
 CAREFUL = Nature(Stat.SPECIAL_DEFENSE, Stat.SPECIAL_ATTACK)
 QUIRKY  = Nature(Stat.SPECIAL_DEFENSE, Stat.SPECIAL_DEFENSE)
+
+NATURES = [HARDY, LONELY, BRAVE, ADAMANT, NAIVE, BOLD, DOCILE, RELAXED, IMPISH, LAX, TIMID, HASTY, SERIOUS, JOLLY, NAIVE, MODEST,
+           MILD, QUIET, BASHFUL, RASH, CALM, GENTLE, SASSY, CAREFUL, QUIRKY]
 
 COMBOS = {
     (Type.NORMAL, None): {Type.FIGHTING: 2, Type.GHOST: 0},
@@ -317,3 +320,7 @@ COMBOS = {
     (Type.STEEL, Type.DRAGON): {Type.NORMAL: 0.5, Type.WATER: 0.5, Type.ELECTRIC: 0.5, Type.GRASS: 0.25, Type.FIGHTING: 2, Type.POISON: 0, Type.GROUND: 2, Type.FLYING: 0.5, Type.PSYCHIC: 0.5, Type.BUG: 0.5, Type.ROCK: 0.5, Type.STEEL: 0.5},
     (Type.STEEL, Type.DARK): {Type.NORMAL: 0.5, Type.FIRE: 2, Type.GRASS: 0.5, Type.ICE: 0.5, Type.FIGHTING: 4, Type.POISON: 0, Type.GROUND: 2, Type.FLYING: 0.5, Type.PSYCHIC: 0, Type.ROCK: 0.5, Type.GHOST: 0.5, Type.DRAGON: 0.5, Type.DARK: 0.5, Type.STEEL: 0.5},
 }
+
+ABILITIES = [
+    Ability()
+]

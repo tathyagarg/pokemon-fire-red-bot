@@ -20,8 +20,9 @@ class Database:
 
         self.DB_NAME = kwargs['DB_NAME']
         self.USER_ID = kwargs['UID']
+        self.PARTY = kwargs['PARTY']
 
-        self.FIELDS = [self.USER_ID]
+        self.FIELDS = [self.USER_ID, self.PARTY]
 
 class Colors:
     def __init__(self, **kwargs) -> None:

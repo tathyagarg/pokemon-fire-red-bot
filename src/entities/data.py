@@ -1,4 +1,4 @@
-from abstracts import Type, Stat, Nature, Ability
+from .abstracts import Type, Stat, Nature, Ability
 
 HARDY   = Nature(Stat.ATTACK, Stat.ATTACK)
 LONELY  = Nature(Stat.ATTACK, Stat.DEFENSE)

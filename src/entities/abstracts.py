@@ -17,6 +17,9 @@ class StatsList:
         self.special_defense = special_defense
         self.speed = speed
 
+    def __iter__(self):
+        return iter([self.hp, self.attack, self.defense, self.special_attack, self.special_defense, self.speed])
+
 class Type(enum.Enum):
     NORMAL = 0
     FIRE = 1
@@ -62,7 +65,7 @@ class Nature:
             return 0.9
         else:
             return 1
-        
+
     def __str__(self) -> str:
         return str(self.index)
 
@@ -76,3 +79,4 @@ class LevelingRate(enum.Enum):
     MEDIUM_SLOW = 1
     FAST = 2
     SLOW = 3
+    

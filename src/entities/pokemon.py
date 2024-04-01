@@ -1,8 +1,5 @@
-import move
-import abstracts
-import data
+from entities import item, move, abstracts, data
 import random
-import item
 import math
 import typing
 
@@ -39,7 +36,7 @@ class Pokemon:
 
         self.typing = self.primary_type, self.secondary_type = typing
         self.matchup = data.COMBOS[
-            str(self.primary_type), str(self.secondary_type)
+            self.primary_type, self.secondary_type
         ]
 
         self.abilities = abilities
@@ -84,13 +81,15 @@ class PokemonInstance:
         self.instance_of = parent
         self.nick = nick or parent.name
         self.level = level or random.randint(1, 100)
-        self.nature = nature or random.choices(abstracts.Nature.natures)
+        self.nature = nature or random.choices(abstracts.Nature.natures)[0]
         self.ivs = ivs or abstracts.StatsList(*random.choices(range(1, 32), k=6))
         self.evs = evs or abstracts.StatsList(*[0 for _ in range(6)])
         self.held_item = held_item
 
     def encode(self) -> str:
-        return f'{self.instance_of.pokedex_number}~{self.nick!r}~{self.level}~{self.nature}~{".".join(self.ivs)}~{".".join(self.evs)}~{self.held_item}'
+        ivs = list(map(str, self.ivs))
+        evs = list(map(str, self.evs))
+        return f'{self.instance_of.pokedex_number}~{self.nick!r}~{self.level}~{self.nature}~{".".join(ivs)}~{".".join(evs)}~{self.held_item}'
 
     @property
     def max_hp(self):
@@ -167,6 +166,6 @@ BULBASAUR = Pokemon(
         1: (move.TACKLE, move.GROWL),
         3: (move.VINE_WHIP)
     },
-    evolution="Ivysaur",
+    evolution_pokedex_number=2,
     evolution_condition=level_reach(16)
 )

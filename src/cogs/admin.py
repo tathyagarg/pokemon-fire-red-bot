@@ -2,6 +2,7 @@ import discord.commands
 from discord.ext import commands
 from constants import BOT_DATA
 import database
+from entities import pokemon
 
 def is_tathya(ctx):
     return ctx.author.id == 843391557168267295
@@ -24,6 +25,12 @@ class AdminCommands(commands.Cog):
             database.run_sql('CREATE TABLE {}'.format(new_table))
         
         await ctx.respond("Done!")
+
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.check(is_tathya)
+    async def new_feature(self, ctx):
+        bbsaur = pokemon.PokemonInstance(pokemon.BULBASAUR)
+        await ctx.respond(bbsaur.encode())
 
 def setup(client):
     client.add_cog(AdminCommands(client))

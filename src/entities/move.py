@@ -1,7 +1,7 @@
-import abstracts
+from .abstracts import Type, MoveCategory
 
-TYPE = abstracts.Type
-MC = abstracts.MoveCategory
+TYPE = Type
+MC = MoveCategory
 
 class Move:
     def __init__(

@@ -45,9 +45,13 @@ class MoveCategory(enum.Enum):
     STATUS = 2
 
 class Nature:
+    natures = []
     def __init__(self, up_stat: Stat, down_stat: Stat) -> None:
         self.up_stat = up_stat
         self.down_stat = down_stat
+
+        self.index = len(Nature.natures)
+        Nature.natures.append(self)
 
     def multiplier_on(self, stat):
         if self.up_stat == self.down_stat:
@@ -58,12 +62,17 @@ class Nature:
             return 0.9
         else:
             return 1
+        
+    def __str__(self) -> str:
+        return str(self.index)
 
 class Ability:
     def __init__(self, name, effect) -> None:
         self.name = name
         self.effect = effect
 
-class LevelingRate:
-    def __init__(self) -> None:
-        pass
+class LevelingRate(enum.Enum):
+    MEDIUM_FAST = 0
+    MEDIUM_SLOW = 1
+    FAST = 2
+    SLOW = 3

@@ -4,8 +4,20 @@ import data
 import random
 import item
 import math
+import typing
 
-class Pokemon:  # Parent
+def level_reach(level: int):
+    def check(pokemon: PokemonInstance):
+        return pokemon.level >= level
+    return check
+
+def level_reach_and_holding(level: int, held_item: item.Item):
+    def check(pokemon: PokemonInstance):
+        return pokemon.level >= level and pokemon.held_item == held_item
+    return check
+
+class Pokemon:
+    all_pokemon = []
     def __init__(
             self,
             name: str,
@@ -18,9 +30,9 @@ class Pokemon:  # Parent
             leveling_rate: abstracts.LevelingRate,
             ev_yield: abstracts.StatsList,
             base_stats: abstracts.StatsList,
-            learnset: list[move.Move],
-            evolution,
-            evolution_condition  # Callable
+            learnset: dict[int, move.Move | tuple[move.Move, ...]],
+            evolution_pokedex_number: int | tuple[int, ...],
+            evolution_condition: typing.Callable | tuple[typing.Callable, ...]  # Callable
     ) -> None:
         self.name = name
         self.pokedex_number = pokedex_number
@@ -41,8 +53,22 @@ class Pokemon:  # Parent
         self.base_stats = base_stats
         self.learnset = learnset
 
-        self.evolution: Pokemon = evolution
+        self.evolution_pokedex = evolution_pokedex_number
         self.evolution_condition = evolution_condition
+
+        Pokemon.all_pokemon.append(self)
+
+    @classmethod
+    def connect_evolutions(cls):
+        for pokemon in cls.all_pokemon:
+            if isinstance(pokemon.evolution_pokedex, tuple):
+                result = []
+                for idx in pokemon.evolution_pokedex:
+                    result.append(cls.all_pokemon[idx-1])
+                
+                pokemon.evolution_pokedex = tuple(result)
+            elif pokemon.evolution_pokedex:
+                pokemon.evolution_pokedex = cls.all_pokemon[pokemon.evolution_pokedex-1]
 
 class PokemonInstance:
     def __init__(
@@ -58,10 +84,13 @@ class PokemonInstance:
         self.instance_of = parent
         self.nick = nick or parent.name
         self.level = level or random.randint(1, 100)
-        self.nature = nature or random.choices(data.NATURES)
+        self.nature = nature or random.choices(abstracts.Nature.natures)
         self.ivs = ivs or abstracts.StatsList(*random.choices(range(1, 32), k=6))
         self.evs = evs or abstracts.StatsList(*[0 for _ in range(6)])
         self.held_item = held_item
+
+    def encode(self) -> str:
+        return f'{self.instance_of.pokedex_number}~{self.nick!r}~{self.level}~{self.nature}~{".".join(self.ivs)}~{".".join(self.evs)}~{self.held_item}'
 
     @property
     def max_hp(self):
@@ -124,6 +153,20 @@ class PokemonInstance:
         )
 
 BULBASAUR = Pokemon(
-    name='Bulbasaur', pokedex_number=1, typing=(abstracts.Type.GRASS, abstracts.Type.POISON),
-    abilities=[]
+    name='Bulbasaur',
+    pokedex_number=1,
+    typing=(abstracts.Type.GRASS, abstracts.Type.POISON),
+    abilities=[data.OVERGROW],
+    gender_ratio=87.5,
+    catch_rate=45,
+    exp_yield=64,
+    leveling_rate=abstracts.LevelingRate.MEDIUM_SLOW,
+    ev_yield=abstracts.StatsList(hp=0, attack=0, defense=0, special_attack=1, special_defense=0, speed=0),
+    base_stats=abstracts.StatsList(hp=45, attack=49, defense=49, special_attack=65, special_defense=65, speed=45),
+    learnset={
+        1: (move.TACKLE, move.GROWL),
+        3: (move.VINE_WHIP)
+    },
+    evolution="Ivysaur",
+    evolution_condition=level_reach(16)
 )

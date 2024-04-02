@@ -6,14 +6,15 @@ def resize_images(assets_path: str = None, starting_idx: int = 0, size: tuple[in
     size = size or (128, 128)
     here = pathlib.Path(__file__).parent.parent.joinpath(assets_path or 'assets')
     for file in os.listdir(here):
-        idx = int(file[:3])
-        if idx < starting_idx:
-            continue
+        if file.endswith('.png'):
+            idx = int(file[:3])
+            if idx < starting_idx:
+                continue
 
-        with Image.open(here.joinpath(file)) as img:
-            img = img.resize(size)
-            img.save(here.joinpath(file))
-            print(f"Altered {file}")
+            with Image.open(here.joinpath(file)) as img:
+                img = img.resize(size)
+                img.save(here.joinpath(file))
+                print(f"Altered {file}")
 
 def main():
     while True:

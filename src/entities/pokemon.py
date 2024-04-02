@@ -2,6 +2,7 @@ from entities import item, move, abstracts, data
 import random
 import math
 import typing
+import re
 
 def level_reach(level: int):
     def check(pokemon: PokemonInstance):
@@ -13,11 +14,16 @@ def level_reach_and_holding(level: int, held_item: item.Item):
         return pokemon.level >= level and pokemon.held_item == held_item
     return check
 
+class PokemonDiscordData:
+    def __init__(self, emoji) -> None:
+        self.emoji = emoji
+
 class Pokemon:
     all_pokemon = []
     def __init__(
             self,
             name: str,
+            discord_data: PokemonDiscordData,
             pokedex_number: int,
             typing: tuple[abstracts.Type, abstracts.Type],
             abilities: list[abstracts.Ability],
@@ -32,6 +38,7 @@ class Pokemon:
             evolution_condition: typing.Callable | tuple[typing.Callable, ...]  # Callable
     ) -> None:
         self.name = name
+        self.discord_data = discord_data
         self.pokedex_number = pokedex_number
 
         self.typing = self.primary_type, self.secondary_type = typing
@@ -76,7 +83,8 @@ class PokemonInstance:
             nature: abstracts.Nature = None,
             ivs: abstracts.StatsList = None,
             evs: abstracts.StatsList = None,
-            held_item: item.Item = None
+            held_item: item.Item = None,
+            hp: int = None
     ) -> None:
         self.instance_of = parent
         self.nick = nick or parent.name
@@ -86,10 +94,31 @@ class PokemonInstance:
         self.evs = evs or abstracts.StatsList(*[0 for _ in range(6)])
         self.held_item = held_item
 
+        self.hp = hp or -1
+
     def encode(self) -> str:
         ivs = list(map(str, self.ivs))
         evs = list(map(str, self.evs))
-        return f'{self.instance_of.pokedex_number}~{self.nick!r}~{self.level}~{self.nature}~{".".join(ivs)}~{".".join(evs)}~{self.held_item}'
+        hp = self.hp if self.hp != -1 else self.max_hp
+        return f'{self.instance_of.pokedex_number}~{self.nick!r}~{self.level}~{self.nature}~{".".join(ivs)}~{".".join(evs)}~{self.held_item}~{hp}'
+    
+    @classmethod
+    def decode(self, encoded_string):
+        regex = r"~(?=(?:[^']*'[^']*')*[^']*$)"
+        split = re.split(regex, encoded_string)
+        parent_id, nick, level, nature_id, ivs, evs, held_item_id, hp = split
+
+        parent_id, level, nature_id = list(map(int, [parent_id, level, nature_id]))
+        nick = nick[1:-1]
+        ivs = abstracts.StatsList(*list(map(int, ivs.split('.'))))
+        evs = abstracts.StatsList(*list(map(int, evs.split('.'))))
+
+        held_item = item.Item.items[int(held_item_id)-1] if held_item_id != 'None' else None
+
+        parent = Pokemon.all_pokemon[parent_id-1]
+        nature = abstracts.Nature.natures[nature_id-1]
+
+        return PokemonInstance(parent=parent, nick=nick, level=level, nature=nature, ivs=ivs, evs=evs, held_item=held_item, hp=hp)
 
     @property
     def max_hp(self):
@@ -153,6 +182,7 @@ class PokemonInstance:
 
 BULBASAUR = Pokemon(
     name='Bulbasaur',
+    discord_data=PokemonDiscordData(emoji='<:001_bulbasaur:1224734492250607699>'),
     pokedex_number=1,
     typing=(abstracts.Type.GRASS, abstracts.Type.POISON),
     abilities=[data.OVERGROW],

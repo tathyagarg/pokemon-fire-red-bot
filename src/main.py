@@ -18,5 +18,9 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
     print(f"{bot.user} is ready to go!")
 
-load_cogs(bot)
-bot.run(BOT_DATA.TOKEN)
+def main():
+    load_cogs(bot)
+    bot.run(BOT_DATA.TOKEN)
+
+if __name__ == "__main__":
+    main()

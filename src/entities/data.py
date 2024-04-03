@@ -1,30 +1,32 @@
 from .abstracts import Type, Stat, Nature, Ability
+from .abstracts import MoveCategory as MC
+from .move import Move
 
-HARDY   = Nature(Stat.ATTACK, Stat.ATTACK)
-LONELY  = Nature(Stat.ATTACK, Stat.DEFENSE)
-BRAVE   = Nature(Stat.ATTACK, Stat.SPEED)
-ADAMANT = Nature(Stat.ATTACK, Stat.SPECIAL_ATTACK)
-NAUGHTY = Nature(Stat.ATTACK, Stat.SPECIAL_DEFENSE)
-BOLD    = Nature(Stat.DEFENSE, Stat.ATTACK)
-DOCILE  = Nature(Stat.DEFENSE, Stat.DEFENSE)
-RELAXED = Nature(Stat.DEFENSE, Stat.SPEED)
-IMPISH  = Nature(Stat.DEFENSE, Stat.SPECIAL_ATTACK)
-LAX     = Nature(Stat.DEFENSE, Stat.SPECIAL_DEFENSE)
-TIMID   = Nature(Stat.SPEED, Stat.ATTACK)
-HASTY   = Nature(Stat.SPEED, Stat.DEFENSE)
-SERIOUS = Nature(Stat.SPEED, Stat.SPEED)
-JOLLY   = Nature(Stat.SPEED, Stat.SPECIAL_ATTACK)
-NAIVE   = Nature(Stat.SPEED, Stat.SPECIAL_DEFENSE)
-MODEST  = Nature(Stat.SPECIAL_ATTACK, Stat.ATTACK)
-MILD    = Nature(Stat.SPECIAL_ATTACK, Stat.DEFENSE)
-QUIET   = Nature(Stat.SPECIAL_ATTACK, Stat.SPEED)
-BASHFUL = Nature(Stat.SPECIAL_ATTACK, Stat.SPECIAL_ATTACK)
-RASH    = Nature(Stat.SPECIAL_ATTACK, Stat.SPECIAL_DEFENSE)
-CALM    = Nature(Stat.SPECIAL_DEFENSE, Stat.ATTACK)
-GENTLE  = Nature(Stat.SPECIAL_DEFENSE, Stat.DEFENSE)
-SASSY   = Nature(Stat.SPECIAL_DEFENSE, Stat.SPEED)
-CAREFUL = Nature(Stat.SPECIAL_DEFENSE, Stat.SPECIAL_ATTACK)
-QUIRKY  = Nature(Stat.SPECIAL_DEFENSE, Stat.SPECIAL_DEFENSE)
+HARDY   = Nature('Hardy', Stat.ATTACK, Stat.ATTACK)
+LONELY  = Nature('Lonely', Stat.ATTACK, Stat.DEFENSE)
+BRAVE   = Nature('Brave', Stat.ATTACK, Stat.SPEED)
+ADAMANT = Nature('Adamant', Stat.ATTACK, Stat.SPECIAL_ATTACK)
+NAUGHTY = Nature('Naughty', Stat.ATTACK, Stat.SPECIAL_DEFENSE)
+BOLD    = Nature('Bold', Stat.DEFENSE, Stat.ATTACK)
+DOCILE  = Nature('Docile', Stat.DEFENSE, Stat.DEFENSE)
+RELAXED = Nature('Relaxed', Stat.DEFENSE, Stat.SPEED)
+IMPISH  = Nature('Impish', Stat.DEFENSE, Stat.SPECIAL_ATTACK)
+LAX     = Nature('Lax', Stat.DEFENSE, Stat.SPECIAL_DEFENSE)
+TIMID   = Nature('Timid', Stat.SPEED, Stat.ATTACK)
+HASTY   = Nature('Hasty', Stat.SPEED, Stat.DEFENSE)
+SERIOUS = Nature('Serious', Stat.SPEED, Stat.SPEED)
+JOLLY   = Nature('Jolly', Stat.SPEED, Stat.SPECIAL_ATTACK)
+NAIVE   = Nature('Naive', Stat.SPEED, Stat.SPECIAL_DEFENSE)
+MODEST  = Nature('Modest', Stat.SPECIAL_ATTACK, Stat.ATTACK)
+MILD    = Nature('Mild', Stat.SPECIAL_ATTACK, Stat.DEFENSE)
+QUIET   = Nature('Quiet', Stat.SPECIAL_ATTACK, Stat.SPEED)
+BASHFUL = Nature('Bashful', Stat.SPECIAL_ATTACK, Stat.SPECIAL_ATTACK)
+RASH    = Nature('Rash', Stat.SPECIAL_ATTACK, Stat.SPECIAL_DEFENSE)
+CALM    = Nature('Calm', Stat.SPECIAL_DEFENSE, Stat.ATTACK)
+GENTLE  = Nature('Gentle', Stat.SPECIAL_DEFENSE, Stat.DEFENSE)
+SASSY   = Nature('Sassy', Stat.SPECIAL_DEFENSE, Stat.SPEED)
+CAREFUL = Nature('Careful', Stat.SPECIAL_DEFENSE, Stat.SPECIAL_ATTACK)
+QUIRKY  = Nature('Quirky', Stat.SPECIAL_DEFENSE, Stat.SPECIAL_DEFENSE)
 
 COMBOS = {
     (Type.NORMAL, None): {Type.FIGHTING: 2, Type.GHOST: 0},
@@ -323,3 +325,16 @@ OVERGROW = Ability("Overgrow", lambda: None)  # TODO
 ABILITIES = [
     OVERGROW
 ]
+
+TACKLE = Move(typing=Type.NORMAL, category=MC.PHYSICAL, PP=35,
+              power=40, accuracy=100, contact=True, protect=True, mirror_move=True, kings_rock=True)
+
+GROWL = Move(typing=Type.NORMAL, category=MC.STATUS, PP=40, power=0, accuracy=100, contact=False,
+             protect=True, mirror_move=True, kings_rock=False)
+
+VINE_WHIP = Move(typing=Type.GRASS, category=MC.PHYSICAL, PP=25, power=45, accuracy=100, contact=True,
+                 protect=True, mirror_move=True, kings_rock=True)
+
+LEECH_SEED = Move(typing=Type.GRASS, category=MC.STATUS, PP=10, power=0, accuracy=90, contact=False,
+                  protect=True, mirror_move=True, kings_rock=False)
+

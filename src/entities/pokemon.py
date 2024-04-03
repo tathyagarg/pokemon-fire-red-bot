@@ -57,7 +57,7 @@ class Pokemon:
         self.base_stats = base_stats
         self.learnset = learnset
 
-        self.evolution_pokedex = evolution_pokedex_number
+        self.evolution = evolution_pokedex_number
         self.evolution_condition = evolution_condition
 
         Pokemon.all_pokemon.append(self)
@@ -65,14 +65,14 @@ class Pokemon:
     @classmethod
     def connect_evolutions(cls):
         for pokemon in cls.all_pokemon:
-            if isinstance(pokemon.evolution_pokedex, tuple):
+            if isinstance(pokemon.evolution, tuple):
                 result = []
-                for idx in pokemon.evolution_pokedex:
+                for idx in pokemon.evolution:
                     result.append(cls.all_pokemon[idx-1])
                 
-                pokemon.evolution_pokedex = tuple(result)
-            elif pokemon.evolution_pokedex:
-                pokemon.evolution_pokedex = cls.all_pokemon[pokemon.evolution_pokedex-1]
+                pokemon.evolution = tuple(result)
+            elif pokemon.evolution:
+                pokemon.evolution = cls.all_pokemon[pokemon.evolution-1]
 
 class PokemonInstance:
     def __init__(
@@ -100,7 +100,7 @@ class PokemonInstance:
         ivs = list(map(str, self.ivs))
         evs = list(map(str, self.evs))
         hp = self.hp if self.hp != -1 else self.max_hp
-        return f'{self.instance_of.pokedex_number}~{self.nick!r}~{self.level}~{self.nature}~{".".join(ivs)}~{".".join(evs)}~{self.held_item}~{hp}'
+        return f'{self.instance_of.pokedex_number}~{self.nick!r}~{self.level}~{self.nature.index}~{".".join(ivs)}~{".".join(evs)}~{self.held_item.index}~{hp}'
     
     @classmethod
     def decode(self, encoded_string):
@@ -182,7 +182,7 @@ class PokemonInstance:
 
 BULBASAUR = Pokemon(
     name='Bulbasaur',
-    discord_data=PokemonDiscordData(emoji='<:001_bulbasaur:1224734492250607699>'),
+    discord_data=PokemonDiscordData(emoji='<:001_bulbasaur:1224869651323027466>'),
     pokedex_number=1,
     typing=(abstracts.Type.GRASS, abstracts.Type.POISON),
     abilities=[data.OVERGROW],
@@ -193,9 +193,55 @@ BULBASAUR = Pokemon(
     ev_yield=abstracts.StatsList(hp=0, attack=0, defense=0, special_attack=1, special_defense=0, speed=0),
     base_stats=abstracts.StatsList(hp=45, attack=49, defense=49, special_attack=65, special_defense=65, speed=45),
     learnset={
-        1: (move.TACKLE, move.GROWL),
-        3: (move.VINE_WHIP)
+        1: (data.TACKLE, data.GROWL),
+        3: data.VINE_WHIP
     },
     evolution_pokedex_number=2,
     evolution_condition=level_reach(16)
 )
+
+IVYSAUR = Pokemon(
+    name='Ivysaur',
+    discord_data=PokemonDiscordData(emoji='<:002_ivysaur:1224869926297272491>'),
+    pokedex_number=2,
+    typing=(abstracts.Type.GRASS, abstracts.Type.POISON),
+    abilities=[data.OVERGROW],
+    gender_ratio=87.5,
+    catch_rate=45,
+    exp_yield=141,
+    leveling_rate=abstracts.LevelingRate.MEDIUM_SLOW,
+    ev_yield=abstracts.StatsList(hp=0, attack=0, defense=0, special_attack=1, special_defense=1, speed=0),
+    base_stats=abstracts.StatsList(hp=60, attack=62, defense=63, special_attack=80, special_defense=80, speed=60),
+    learnset={
+        1: (data.TACKLE, data.GROWL, data.LEECH_SEED),
+        4: data.GROWL,
+        7: data.LEECH_SEED,
+        10: data.VINE_WHIP
+    },
+    evolution_pokedex_number=3,
+    evolution_condition=level_reach(32)
+)
+
+VENASAUR = Pokemon(
+    name='Venasaur',
+    discord_data=PokemonDiscordData(emoji="<:003_venasaur:1224875186558472242>"),
+    pokedex_number=3,
+    typing=(abstracts.Type.GRASS, abstracts.Type.POISON),
+    abilities=[data.OVERGROW],
+    gender_ratio=87.5,
+    catch_rate=45,
+    exp_yield=208,
+    leveling_rate=abstracts.LevelingRate.MEDIUM_SLOW,
+    ev_yield=abstracts.StatsList(hp=0, attack=0, defense=0, special_attack=2, special_defense=1, speed=0),
+    base_stats=abstracts.StatsList(hp=80, attack=82, defense=83, special_attack=100, special_defense=100, speed=80),
+    learnset={
+        1: (data.TACKLE, data.GROWL, data.LEECH_SEED, data.VINE_WHIP),
+        4: data.GROWL,
+        7: data.LEECH_SEED,
+        10: data.VINE_WHIP
+    },
+    evolution_pokedex_number=None,
+    evolution_condition=None
+)
+
+Pokemon.connect_evolutions()

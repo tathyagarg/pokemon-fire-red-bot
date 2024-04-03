@@ -20,6 +20,7 @@ class StatsList:
     def __iter__(self):
         return iter([self.hp, self.attack, self.defense, self.special_attack, self.special_defense, self.speed])
 
+
 class Type(enum.Enum):
     NORMAL = 0
     FIRE = 1
@@ -49,7 +50,8 @@ class MoveCategory(enum.Enum):
 
 class Nature:
     natures = []
-    def __init__(self, up_stat: Stat, down_stat: Stat) -> None:
+    def __init__(self, name: str, up_stat: Stat, down_stat: Stat) -> None:
+        self.name = name
         self.up_stat = up_stat
         self.down_stat = down_stat
 
@@ -67,7 +69,7 @@ class Nature:
             return 1
 
     def __str__(self) -> str:
-        return str(self.index)
+        return self.name
 
 class Ability:
     def __init__(self, name, effect) -> None:

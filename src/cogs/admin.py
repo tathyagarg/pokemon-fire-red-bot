@@ -2,7 +2,9 @@ import discord.commands
 from discord.ext import commands
 from constants import BOT_DATA
 from database import run_sql
-from entities import pokemon
+from entities import pokemon, data
+from extensions import dialogue
+import commons
 
 def is_tathya(ctx):
     return ctx.author.id == 843391557168267295
@@ -40,7 +42,14 @@ class AdminCommands(commands.Cog):
     @commands.check(is_tathya)
     async def make_new(self, ctx, pokedex: int = 1):
         pkmn = pokemon.PokemonInstance(pokemon.Pokemon.all_pokemon[pokedex-1])
-        await ctx.respond(pkmn.encode())        
+        await ctx.respond(pkmn.encode())
+
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.check(is_tathya)
+    async def new_feature(self, ctx):
+        msg = await ctx.respond('abc')
+        d = dialogue.Dialogue(msg.id, [(data.PROFESSOR_OAK, 'a', None), (data.PROFESSOR_OAK, 'b', commons.Input('???')), (data.PROFESSOR_OAK, 'c', None)])
+        await (await msg.original_response()).edit(view=d.paginator)
 
 class CogManager(commands.Cog):
     def __init__(self, bot) -> None:

@@ -1,6 +1,7 @@
 from .abstracts import Type, Stat, Nature, Ability
 from .abstracts import MoveCategory as MC
 from .move import Move
+from commons import Character
 
 HARDY   = Nature('Hardy', Stat.ATTACK, Stat.ATTACK)
 LONELY  = Nature('Lonely', Stat.ATTACK, Stat.DEFENSE)
@@ -338,3 +339,4 @@ VINE_WHIP = Move(typing=Type.GRASS, category=MC.PHYSICAL, PP=25, power=45, accur
 LEECH_SEED = Move(typing=Type.GRASS, category=MC.STATUS, PP=10, power=0, accuracy=90, contact=False,
                   protect=True, mirror_move=True, kings_rock=False)
 
+PROFESSOR_OAK = Character(name='Professor Oak', img='assets/characters/professor_oak.png')

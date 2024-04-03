@@ -8,3 +8,12 @@ def check_registered(ctx):
 def check_registered_without_context(user):
     result = run_sql("SELECT * FROM {} WHERE {} = ?".format(BOT_DATA.DATABASE.DB_NAME, BOT_DATA.DATABASE.USER_ID), (user.id,))
     return result != []
+
+class Input:
+    def __init__(self, query) -> None:
+        self.query = query
+
+class Character:
+    def __init__(self, name: str, img: str) -> None:
+        self.name = name
+        self.img = img

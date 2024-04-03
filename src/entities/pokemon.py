@@ -224,7 +224,7 @@ IVYSAUR = Pokemon(
 
 VENASAUR = Pokemon(
     name='Venasaur',
-    discord_data=PokemonDiscordData(emoji="<:003_venasaur:1224875186558472242>"),
+    discord_data=PokemonDiscordData(emoji="<:003_venasaur:1225147158127186022>"),
     pokedex_number=3,
     typing=(abstracts.Type.GRASS, abstracts.Type.POISON),
     abilities=[data.OVERGROW],

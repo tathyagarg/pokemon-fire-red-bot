@@ -39,7 +39,7 @@ class Party(commands.Cog):
 
         for i, pokemon in enumerate(party, 1):
             pokemon = pokemon_events.PokemonInstance.decode(pokemon[1:-1])
-            embed.add_field(name=f'Slot {i}', value=f"{pokemon.instance_of.discord_data.emoji} {pokemon.nick}", inline=True)
+            embed.add_field(name=f'Slot {i}', value=f"{pokemon.instance_of.discord_data.emoji} Level {pokemon.level} {pokemon.nick}", inline=True)
 
         await ctx.respond(embed=embed)
 

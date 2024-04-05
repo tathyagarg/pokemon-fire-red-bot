@@ -5,20 +5,21 @@ from commons import Character
 from constants import BOT_DATA
 
 class UserModal(discord.ui.Modal):
-    def __init__(self, title, question) -> None:
+    def __init__(self, title, questions) -> None:
         super().__init__(title=title)
 
-        self.value = None
+        self.value = []
         self.interaction = None
-        self.ti = InputText(
+        self.tis = [InputText(
             label=question,
             style=discord.InputTextStyle.short
-        )
+        ) for question in questions]
 
-        self.add_item(self.ti)
+        for ti in self.tis:
+            self.add_item(ti)
 
     async def callback(self, interaction: discord.Interaction):
-        self.value = self.ti.value
+        self.value.extend([ti.value for ti in self.tis])
         self.interaction = interaction
         self.stop()
 
@@ -82,18 +83,22 @@ class PaginationView(discord.ui.View):
         await interaction.response.edit_message(content='', embed=embed, view=self, file=file)
     
     @discord.ui.button(custom_id='pages', disabled=True)
-    async def pages(self, button, interaction):  # eternally disabled
+    async def _pages(self, button, interaction):  # eternally disabled
         ...
 
     @discord.ui.button(label='>', custom_id='>', style=discord.ButtonStyle.blurple)
     async def forward(self, button, interaction):
         action = self.pages[self.curr][2]
+        result = ''
+
         if action:
-            modal = UserModal("What's your name?", "Enter your name")
+            modal = UserModal(title="What's your name?", questions=["Enter your name"])
             await interaction.response.send_modal(modal)
             _ = await modal.wait()
-            result = modal.value
+            result = modal.value[0]
             await modal.interaction.respond(f'You submitted {result!r}', ephemeral=True)
+
+            action.action(result)
 
         self.curr += 1
         self.disable_buttons()
@@ -103,16 +108,12 @@ class PaginationView(discord.ui.View):
         path = character.img
         file = discord.File(path, filename='output.png')
 
-        embed = discord.Embed(title=character.name, description=self.pages[self.curr][1], color=BOT_DATA.COLORS.COLOR_PRIMARY)
+        embed = discord.Embed(title=character.name, description=self.pages[self.curr][1] + result, color=BOT_DATA.COLORS.COLOR_PRIMARY)
         embed.set_image(url=f'attachment://output.png')
 
         if action:
-            embed = discord.Embed(title=character.name, description=self.pages[self.curr][1] + result, color=BOT_DATA.COLORS.COLOR_PRIMARY)  # TODO
-            embed.set_image(url=f'attachment://output.png')
             await (await interaction.original_response()).edit(content='', embed=embed, view=self, file=file)
         else:
-            embed = discord.Embed(title=character.name, description=self.pages[self.curr][1], color=BOT_DATA.COLORS.COLOR_PRIMARY)
-            embed.set_image(url=f'attachment://output.png')
             await interaction.response.edit_message(content='', embed=embed, view=self, file=file)
 
     @discord.ui.button(label='>>', custom_id='>>', style=discord.ButtonStyle.green)

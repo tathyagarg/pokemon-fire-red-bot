@@ -6,6 +6,8 @@ from entities import pokemon, data
 from extensions import dialogue
 import commons
 
+DATABASE = BOT_DATA.DATABASE
+
 def is_tathya(ctx):
     return ctx.author.id == 843391557168267295
 
@@ -23,19 +25,19 @@ class AdminCommands(commands.Cog):
     @commands.check(is_tathya)
     async def clear_table(self, ctx, new_table: str = ""):
         if new_table:
-            run_sql('DROP TABLE {}'.format(BOT_DATA.DATABASE.DB_NAME))
+            run_sql('DROP TABLE {}'.format(DATABASE.DB_NAME))
             run_sql('CREATE TABLE {}'.format(new_table))
         else:
-            run_sql('DELETE FROM {}'.format(BOT_DATA.DATABASE.DB_NAME))
+            run_sql('DELETE FROM {}'.format(DATABASE.DB_NAME))
         
         await ctx.respond("Done!")
 
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
     @commands.check(is_tathya)
     async def add_pokemon_to_party(self, ctx, instance_data):
-        result = run_sql("SELECT {} FROM {} WHERE {}=?".format(BOT_DATA.DATABASE.PARTY, BOT_DATA.DATABASE.DB_NAME, BOT_DATA.DATABASE.USER_ID), (ctx.author.id,))[0][0]
+        result = run_sql("SELECT {} FROM {} WHERE {}=?".format(DATABASE.PARTY, DATABASE.DB_NAME, DATABASE.USER_ID), (ctx.author.id,))[0][0]
         new_party = (result + f'.<{instance_data}>').strip('.   ')
-        run_sql("UPDATE {} SET {}=? WHERE {}=?".format(BOT_DATA.DATABASE.DB_NAME, BOT_DATA.DATABASE.PARTY, BOT_DATA.DATABASE.USER_ID), (new_party, ctx.author.id,))
+        run_sql("UPDATE {} SET {}=? WHERE {}=?".format(DATABASE.DB_NAME, DATABASE.PARTY, DATABASE.USER_ID), (new_party, ctx.author.id,))
         await ctx.respond("Updated!")
 
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
@@ -48,7 +50,20 @@ class AdminCommands(commands.Cog):
     @commands.check(is_tathya)
     async def new_feature(self, ctx):
         msg = await ctx.respond('abc')
-        d = dialogue.Dialogue(msg.id, [(data.PROFESSOR_OAK, 'a', None), (data.PROFESSOR_OAK, 'b', commons.Input('???')), (data.PROFESSOR_OAK, 'c', None)])
+        d = dialogue.Dialogue(
+            msg.id,
+            [
+                (data.PROFESSOR_OAK, 'a', None),
+                (data.PROFESSOR_OAK, 'b', commons.Input(
+                    '???',
+                    lambda value: run_sql(
+                        sql="UPDATE {} SET {} = ? WHERE {} = ?".format(DATABASE.DB_NAME, DATABASE.USE_NAME, DATABASE.USER_ID),
+                        values=(value, ctx.author.id)
+                    )
+                )),
+                (data.PROFESSOR_OAK, 'c', None)
+            ]
+        )
         await (await msg.original_response()).edit(view=d.paginator)
 
 class CogManager(commands.Cog):

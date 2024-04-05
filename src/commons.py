@@ -10,8 +10,9 @@ def check_registered_without_context(user):
     return result != []
 
 class Input:
-    def __init__(self, query) -> None:
+    def __init__(self, query, action) -> None:
         self.query = query
+        self.action = action
 
 class Character:
     def __init__(self, name: str, img: str) -> None:

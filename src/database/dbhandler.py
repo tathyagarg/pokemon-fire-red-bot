@@ -17,7 +17,7 @@ def check_user_exists(uid: int) -> bool:
 def register_user(uid: int):
     with sqlite3.connect(DATABASE) as conn:
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO {}{} VALUES(?, '')".format(
+        cursor.execute("INSERT INTO {}{} VALUES(?, '', '')".format(
             DATABASE_NAME,
             f"({','.join(DATA.FIELDS)})"
         ), (uid,))

@@ -10,14 +10,14 @@ class Stat(enum.Enum):
 
 class StatsList:
     def __init__(self, hp: int, attack: int, defense: int, special_attack: int, special_defense: int, speed: int) -> None:
-        self.hp = hp
-        self.attack = attack
-        self.defense = defense
-        self.special_attack = special_attack
-        self.special_defense = special_defense
-        self.speed = speed
+        self.hp: int = hp
+        self.attack: int = attack
+        self.defense: int = defense
+        self.special_attack: int = special_attack
+        self.special_defense: int = special_defense
+        self.speed: int = speed
 
-    def __iter__(self):
+    def __iter__(self) -> iter:
         return iter([self.hp, self.attack, self.defense, self.special_attack, self.special_defense, self.speed])
 
 
@@ -49,31 +49,31 @@ class MoveCategory(enum.Enum):
     STATUS = 2
 
 class Nature:
-    natures = []
+    natures: list = []  # list[Nature]
     def __init__(self, name: str, up_stat: Stat, down_stat: Stat) -> None:
-        self.name = name
-        self.up_stat = up_stat
-        self.down_stat = down_stat
+        self.name: str = name
+        self.up_stat: Stat = up_stat
+        self.down_stat: Stat = down_stat
 
-        self.index = len(Nature.natures)
+        self.index: int = len(Nature.natures)
         Nature.natures.append(self)
 
-    def multiplier_on(self, stat):
+    def multiplier_on(self, stat: Stat) -> float:
         if self.up_stat == self.down_stat:
-            return 1
+            return 1.
         elif stat == self.up_stat:
             return 1.1
         elif stat == self.down_stat:
             return 0.9
         else:
-            return 1
+            return 1.
 
     def __str__(self) -> str:
         return self.name
 
 class Ability:
-    def __init__(self, name, effect) -> None:
-        self.name = name
+    def __init__(self, name: str, effect) -> None:
+        self.name: str = name
         self.effect = effect
 
 class LevelingRate(enum.Enum):

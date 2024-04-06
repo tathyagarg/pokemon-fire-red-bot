@@ -1,12 +1,11 @@
 from .abstracts import Type, MoveCategory
 
-TYPE = Type
 MC = MoveCategory
 
 class Move:
     def __init__(
             self,
-            typing: TYPE,
+            typing: Type,
             category: MC,
             PP: int,
             power: int,
@@ -16,14 +15,14 @@ class Move:
             mirror_move: bool,
             kings_rock: bool
     ) -> None:
-        self.typing = typing
-        self.category = category
+        self.typing: Type = typing
+        self.category: MC = category
 
-        self.PP = PP
-        self.power = power
-        self.accuracy = accuracy
+        self.PP: int = PP
+        self.power: int = power
+        self.accuracy: int | float = accuracy
 
-        self.contact = contact
-        self.protect = protect
-        self.mirror_move = mirror_move
-        self.kings_rock = kings_rock
+        self.contact: bool = contact
+        self.protect: bool = protect
+        self.mirror_move: bool = mirror_move
+        self.kings_rock: bool = kings_rock

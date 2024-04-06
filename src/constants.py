@@ -1,8 +1,8 @@
-import pathlib
 import toml
+import pathlib
 
-parent = pathlib.Path(__file__).parents[1]  # parent directory of src
-config = parent.joinpath('config.toml')
+parent: pathlib.PosixPath = pathlib.Path(__file__).parents[1]  # parent directory of src
+config: pathlib.PosixPath = parent.joinpath('config.toml')
 
 class BotData:
     """
@@ -16,23 +16,24 @@ class BotData:
 
 class Database:
     def __init__(self, **kwargs) -> None:
-        self.DB_FILE = kwargs['DB_FILE']
+        self.DB_FILE: str = kwargs['DB_FILE']
 
-        self.DB_NAME = kwargs['DB_NAME']
-        self.USER_ID = kwargs['UID']
-        self.PARTY = kwargs['PARTY']
-        self.USE_NAME = kwargs['USE_NAME']
+        self.DB_NAME: str = kwargs['DB_NAME']
+        self.USER_ID: str = kwargs['UID']
+        self.PARTY: str = kwargs['PARTY']
+        self.USE_NAME: str = kwargs['USE_NAME']
 
-        self.FIELDS = [self.USER_ID, self.PARTY, self.USE_NAME]
+        self.FIELDS: list[str] = [self.USER_ID, self.PARTY, self.USE_NAME]
 
 class Colors:
     def __init__(self, **kwargs) -> None:
-        self.COLOR_PRIMARY = kwargs['COLOR_PRIMARY']
-        self.COLOR_ERROR = kwargs['COLOR_ERROR']
-        self.COLOR_SUCCESS = kwargs['COLOR_SUCCESS']
+        self.COLOR_PRIMARY: int = kwargs['COLOR_PRIMARY']
+        self.COLOR_ERROR: int = kwargs['COLOR_ERROR']
+        self.COLOR_SUCCESS: int = kwargs['COLOR_SUCCESS']
 
-with open(config, 'r') as f:
-    data = toml.load(f)
-    BOT_DATA = BotData(**data)
+with open(file=config, mode='r') as f:
+    data: dict[str, str | dict[str, str | int]] = toml.load(f)
+    BOT_DATA: BotData = BotData(**data)
     BOT_DATA.DATABASE = Database(**data['DATABASE'])
     BOT_DATA.COLORS = Colors(**data['COLORS'])
+    

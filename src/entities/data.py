@@ -1,35 +1,35 @@
-from .abstracts import Type, Stat, Nature, Ability
-from .abstracts import MoveCategory as MC
 from .move import Move
 from commons import Character
+from .abstracts import MoveCategory as MC
+from .abstracts import Type, Stat, Nature, Ability
 
-HARDY   = Nature('Hardy', Stat.ATTACK, Stat.ATTACK)
-LONELY  = Nature('Lonely', Stat.ATTACK, Stat.DEFENSE)
-BRAVE   = Nature('Brave', Stat.ATTACK, Stat.SPEED)
-ADAMANT = Nature('Adamant', Stat.ATTACK, Stat.SPECIAL_ATTACK)
-NAUGHTY = Nature('Naughty', Stat.ATTACK, Stat.SPECIAL_DEFENSE)
-BOLD    = Nature('Bold', Stat.DEFENSE, Stat.ATTACK)
-DOCILE  = Nature('Docile', Stat.DEFENSE, Stat.DEFENSE)
-RELAXED = Nature('Relaxed', Stat.DEFENSE, Stat.SPEED)
-IMPISH  = Nature('Impish', Stat.DEFENSE, Stat.SPECIAL_ATTACK)
-LAX     = Nature('Lax', Stat.DEFENSE, Stat.SPECIAL_DEFENSE)
-TIMID   = Nature('Timid', Stat.SPEED, Stat.ATTACK)
-HASTY   = Nature('Hasty', Stat.SPEED, Stat.DEFENSE)
-SERIOUS = Nature('Serious', Stat.SPEED, Stat.SPEED)
-JOLLY   = Nature('Jolly', Stat.SPEED, Stat.SPECIAL_ATTACK)
-NAIVE   = Nature('Naive', Stat.SPEED, Stat.SPECIAL_DEFENSE)
-MODEST  = Nature('Modest', Stat.SPECIAL_ATTACK, Stat.ATTACK)
-MILD    = Nature('Mild', Stat.SPECIAL_ATTACK, Stat.DEFENSE)
-QUIET   = Nature('Quiet', Stat.SPECIAL_ATTACK, Stat.SPEED)
-BASHFUL = Nature('Bashful', Stat.SPECIAL_ATTACK, Stat.SPECIAL_ATTACK)
-RASH    = Nature('Rash', Stat.SPECIAL_ATTACK, Stat.SPECIAL_DEFENSE)
-CALM    = Nature('Calm', Stat.SPECIAL_DEFENSE, Stat.ATTACK)
-GENTLE  = Nature('Gentle', Stat.SPECIAL_DEFENSE, Stat.DEFENSE)
-SASSY   = Nature('Sassy', Stat.SPECIAL_DEFENSE, Stat.SPEED)
-CAREFUL = Nature('Careful', Stat.SPECIAL_DEFENSE, Stat.SPECIAL_ATTACK)
-QUIRKY  = Nature('Quirky', Stat.SPECIAL_DEFENSE, Stat.SPECIAL_DEFENSE)
+HARDY  : Nature = Nature(name='Hardy', up_stat=Stat.ATTACK, down_stat=Stat.ATTACK)
+LONELY : Nature = Nature(name='Lonely', up_stat=Stat.ATTACK, down_stat=Stat.DEFENSE)
+BRAVE  : Nature = Nature(name='Brave', up_stat=Stat.ATTACK, down_stat=Stat.SPEED)
+ADAMANT: Nature = Nature(name='Adamant', up_stat=Stat.ATTACK, down_stat=Stat.SPECIAL_ATTACK)
+NAUGHTY: Nature = Nature(name='Naughty', up_stat=Stat.ATTACK, down_stat=Stat.SPECIAL_DEFENSE)
+BOLD   : Nature = Nature(name='Bold', up_stat=Stat.DEFENSE, down_stat=Stat.ATTACK)
+DOCILE : Nature = Nature(name='Docile', up_stat=Stat.DEFENSE, down_stat=Stat.DEFENSE)
+RELAXED: Nature = Nature(name='Relaxed', up_stat=Stat.DEFENSE, down_stat=Stat.SPEED)
+IMPISH : Nature = Nature(name='Impish', up_stat=Stat.DEFENSE, down_stat=Stat.SPECIAL_ATTACK)
+LAX    : Nature = Nature(name='Lax', up_stat=Stat.DEFENSE, down_stat=Stat.SPECIAL_DEFENSE)
+TIMID  : Nature = Nature(name='Timid', up_stat=Stat.SPEED, down_stat=Stat.ATTACK)
+HASTY  : Nature = Nature(name='Hasty', up_stat=Stat.SPEED, down_stat=Stat.DEFENSE)
+SERIOUS: Nature = Nature(name='Serious', up_stat=Stat.SPEED, down_stat=Stat.SPEED)
+JOLLY  : Nature = Nature(name='Jolly', up_stat=Stat.SPEED, down_stat=Stat.SPECIAL_ATTACK)
+NAIVE  : Nature = Nature(name='Naive', up_stat=Stat.SPEED, down_stat=Stat.SPECIAL_DEFENSE)
+MODEST : Nature = Nature(name='Modest', up_stat=Stat.SPECIAL_ATTACK, down_stat=Stat.ATTACK)
+MILD   : Nature = Nature(name='Mild', up_stat=Stat.SPECIAL_ATTACK, down_stat=Stat.DEFENSE)
+QUIET  : Nature = Nature(name='Quiet', up_stat=Stat.SPECIAL_ATTACK, down_stat=Stat.SPEED)
+BASHFUL: Nature = Nature(name='Bashful', up_stat=Stat.SPECIAL_ATTACK, down_stat=Stat.SPECIAL_ATTACK)
+RASH   : Nature = Nature(name='Rash', up_stat=Stat.SPECIAL_ATTACK, down_stat=Stat.SPECIAL_DEFENSE)
+CALM   : Nature = Nature(name='Calm', up_stat=Stat.SPECIAL_DEFENSE, down_stat=Stat.ATTACK)
+GENTLE : Nature = Nature(name='Gentle', up_stat=Stat.SPECIAL_DEFENSE, down_stat=Stat.DEFENSE)
+SASSY  : Nature = Nature(name='Sassy', up_stat=Stat.SPECIAL_DEFENSE, down_stat=Stat.SPEED)
+CAREFUL: Nature = Nature(name='Careful', up_stat=Stat.SPECIAL_DEFENSE, down_stat=Stat.SPECIAL_ATTACK)
+QUIRKY : Nature = Nature(name='Quirky', up_stat=Stat.SPECIAL_DEFENSE, down_stat=Stat.SPECIAL_DEFENSE)
 
-COMBOS = {
+COMBOS: dict[tuple[Type, Type | None], dict[Type, int | float]] = {
     (Type.NORMAL, None): {Type.FIGHTING: 2, Type.GHOST: 0},
     (Type.NORMAL, Type.FIRE): {Type.FIRE: 0.5, Type.WATER: 2, Type.GRASS: 0.5, Type.ICE: 0.5, Type.FIGHTING: 2, Type.GROUND: 2, Type.BUG: 0.5, Type.ROCK: 2, Type.GHOST: 0, Type.STEEL: 0.5},
     (Type.NORMAL, Type.WATER): {Type.FIRE: 0.5, Type.WATER: 0.5, Type.ELECTRIC: 2, Type.GRASS: 2, Type.ICE: 0.5, Type.FIGHTING: 2, Type.GHOST: 0, Type.STEEL: 0.5},
@@ -321,22 +321,22 @@ COMBOS = {
     (Type.STEEL, Type.DARK): {Type.NORMAL: 0.5, Type.FIRE: 2, Type.GRASS: 0.5, Type.ICE: 0.5, Type.FIGHTING: 4, Type.POISON: 0, Type.GROUND: 2, Type.FLYING: 0.5, Type.PSYCHIC: 0, Type.ROCK: 0.5, Type.GHOST: 0.5, Type.DRAGON: 0.5, Type.DARK: 0.5, Type.STEEL: 0.5},
 }
 
-OVERGROW = Ability("Overgrow", lambda: None)  # TODO
+OVERGROW: Ability = Ability("Overgrow", lambda: None)  # TODO
 
-ABILITIES = [
+ABILITIES: list[Ability] = [
     OVERGROW
 ]
 
-TACKLE = Move(typing=Type.NORMAL, category=MC.PHYSICAL, PP=35,
+TACKLE: Move = Move(typing=Type.NORMAL, category=MC.PHYSICAL, PP=35,
               power=40, accuracy=100, contact=True, protect=True, mirror_move=True, kings_rock=True)
 
-GROWL = Move(typing=Type.NORMAL, category=MC.STATUS, PP=40, power=0, accuracy=100, contact=False,
+GROWL: Move = Move(typing=Type.NORMAL, category=MC.STATUS, PP=40, power=0, accuracy=100, contact=False,
              protect=True, mirror_move=True, kings_rock=False)
 
-VINE_WHIP = Move(typing=Type.GRASS, category=MC.PHYSICAL, PP=25, power=45, accuracy=100, contact=True,
+VINE_WHIP: Move = Move(typing=Type.GRASS, category=MC.PHYSICAL, PP=25, power=45, accuracy=100, contact=True,
                  protect=True, mirror_move=True, kings_rock=True)
 
-LEECH_SEED = Move(typing=Type.GRASS, category=MC.STATUS, PP=10, power=0, accuracy=90, contact=False,
+LEECH_SEED: Move = Move(typing=Type.GRASS, category=MC.STATUS, PP=10, power=0, accuracy=90, contact=False,
                   protect=True, mirror_move=True, kings_rock=False)
 
-PROFESSOR_OAK = Character(name='Professor Oak', img='assets/characters/professor_oak.png')
+PROFESSOR_OAK: Character = Character(name='Professor Oak', img='assets/characters/professor_oak.png')

@@ -28,8 +28,10 @@ class Database:
 class Colors:
     def __init__(self, **kwargs) -> None:
         self.COLOR_PRIMARY: int = kwargs['COLOR_PRIMARY']
+        self.COLOR_SECONDARY: int = kwargs['COLOR_SECONDARY']
         self.COLOR_ERROR: int = kwargs['COLOR_ERROR']
         self.COLOR_SUCCESS: int = kwargs['COLOR_SUCCESS']
+        self.COLOR_INFO: int = kwargs['COLOR_INFO']
 
 with open(file=config, mode='r') as f:
     data: dict[str, str | dict[str, str | int]] = toml.load(f)

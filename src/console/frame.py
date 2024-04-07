@@ -89,5 +89,3 @@ def generate_gradient(size: int, color_start: int = BOT_DATA.COLORS.COLOR_PRIMAR
 def generate_code(color: int) -> str:
     r, g, b = hex_to_rgb(color)
     return COLOR_STRING.format(r, g, b)
-
-info_color = generate_code(BOT_DATA.COLORS.COLOR_INFO)

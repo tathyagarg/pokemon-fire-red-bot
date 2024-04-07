@@ -1,7 +1,20 @@
 import os
+import console
 import pathlib
 from PIL import Image
 from global_vars import *
+
+def int_validate(message: str, acceptable_range: range = None) -> int:
+    while True:
+        try:
+            result = int(console.input(message=message))
+            if acceptable_range:
+                assert result-1 in acceptable_range
+            return result
+        except ValueError:
+            print('Invalid.')
+        except AssertionError:
+            print('Too high/low')
 
 class Utils:
     def __init__(self, bot: BOT) -> None:
@@ -27,3 +40,37 @@ class Utils:
             img: Image = img.resize((img.size[0] * size_multiplier, img.size[1] * size_multiplier))
             img.save(fp=here)
             print(f"Altered {assets_path}")
+
+    def load_cog(self) -> None:
+        extension: str = console.input('Extension>>> ')
+        self.bot.load_extension(extension)
+
+    def unload_cog(self) -> None:
+        extension: str = console.input('Extension>>> ')
+        self.bot.unload_extension(extension)
+
+    def reload_cog(self) -> None:
+        extension: str = console.input('Extension>>> ')
+        self.bot.unload_extension(extension)
+        self.bot.load_extension(extension)
+
+    def run(self):
+        frame = console.Frame(rows=10)
+        frame.register_text('Shell Admin Interface')
+
+        frame.display()
+
+        options = {
+            'Load Cog': self.load_cog,
+            'Unload Cog': self.unload_cog,
+            'Reload Cog': self.reload_cog,
+            'Kill': quit
+        }
+
+        print(console.COLORS.INFO)
+        for i, option in enumerate(options, 1):
+            print(f"[{i}] {option}")
+
+        while True:
+            choice = int_validate('>>> ', range(len(options)))-1
+            options[list(options)[choice]]()

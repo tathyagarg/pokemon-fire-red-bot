@@ -18,13 +18,13 @@ class AdminCommands(commands.Cog):
     def __init__(self, bot: BOT) -> None:
         self.bot: BOT = bot
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Run SQL commands on the users.sql file')
     @commands.check(is_tathya)
     async def sql(self, ctx: CTX, query: str, values: str = "") -> None:
         values: tuple[str, ...] = values or tuple()
         await ctx.respond(run_sql(sql=query, values=values))
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Delete all contents of the table, or reinitalize a new table')
     @commands.check(is_tathya)
     async def clear_table(self, ctx: CTX, new_table: str = "") -> None:
         if new_table:
@@ -35,7 +35,7 @@ class AdminCommands(commands.Cog):
         
         await ctx.respond("Done!")
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Add a Pokemon from given instance data to the author\'s party')
     @commands.check(is_tathya)
     async def add_pokemon_to_party(self, ctx: CTX, instance_data: str) -> None:
         result: str = run_sql(sql="SELECT {} FROM {} WHERE {}=?".format(DATABASE.PARTY, DATABASE.DB_NAME, DATABASE.USER_ID), values=(ctx.author.id,))[0][0]
@@ -43,13 +43,13 @@ class AdminCommands(commands.Cog):
         run_sql(sql="UPDATE {} SET {}=? WHERE {}=?".format(DATABASE.DB_NAME, DATABASE.PARTY, DATABASE.USER_ID), values=(new_party, ctx.author.id,))
         await ctx.respond("Updated!")
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Create a pokemon with random stats')
     @commands.check(is_tathya)
     async def make_new(self, ctx: CTX, pokedex: int = 1) -> None:
         pkmn: pokemon.PokemonInstance = pokemon.PokemonInstance(parent=pokemon.Pokemon.all_pokemon[pokedex-1])
         await ctx.respond(pkmn.encode())
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Test out the newest beta feature')
     @commands.check(is_tathya)
     async def new_feature(self, ctx: CTX) -> None:
         msg: INTERACTION = await ctx.respond('abc')  # TODO: Add a default embed
@@ -73,7 +73,7 @@ class CogManager(commands.Cog):
     def __init__(self, bot: BOT) -> None:
         self.bot: BOT = bot
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='List all active extensions')
     @commands.check(is_tathya)
     async def list_cogs(self, ctx: CTX) -> None:
         description: str = ""
@@ -88,7 +88,7 @@ class CogManager(commands.Cog):
 
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Unload a specific extension')
     @commands.check(is_tathya)
     async def unload_cog(self, ctx: CTX, cog_name: str) -> None:
         cog_name: str = f"cogs.{cog_name}"
@@ -99,7 +99,7 @@ class CogManager(commands.Cog):
         self.bot.unload_extension(name=cog_name)
         await ctx.respond(f"Unloaded extension {cog_name}")
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Load a specific extension')
     @commands.check(is_tathya)
     async def load_cog(self, ctx: CTX, cog_name: str) -> None:
         cog_name: str = f"cogs.{cog_name}"
@@ -107,7 +107,7 @@ class CogManager(commands.Cog):
         self.bot.load_extension(name=cog_name)
         await ctx.respond(f"Loaded extension {cog_name}")
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Reload a specific extension')
     @commands.check(is_tathya)
     async def reload_cog(self, ctx: CTX, cog_name: str) -> None:
         cog_name: str = f"cogs.{cog_name}"

@@ -12,7 +12,7 @@ def load_cogs(client: BOT) -> None:
     cogs_dir: pathlib.PosixPath = pathlib.Path(__file__).parent.joinpath('cogs')
 
     cogs = [cog for cog in os.listdir(path=cogs_dir) if cog.endswith('.py')]
-    info = console.info_color
+    info = console.COLORS.INFO
 
     for cog in cogs:
         if cog.endswith('.py'):
@@ -25,10 +25,10 @@ bot: BOT = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready() -> None:
-    print(console.info_color + f"[{time.time():.2f}] {bot.user} is ready to go!")
+    print(console.COLORS.INFO + f"[{time.time():.2f}] {bot.user} is ready to go!")
 
 def main() -> None:
-    print(console.info_color + f"[{time.time():.2f}] Launching")
+    print(console.COLORS.INFO + f"[{time.time():.2f}] Launching")
 
     frame = console.Frame(rows=12)
     frame.register_text('Pokemon Fire Red Bot')
@@ -38,6 +38,8 @@ def main() -> None:
 
     load_cogs(client=bot)
     bot.run(BOT_DATA.TOKEN)
+
+#    utils.Utils(bot=bot).run()
 
 if __name__ == "__main__":
     main()

@@ -4,6 +4,7 @@ import utils
 import console
 import discord
 import pathlib
+import threading
 from global_vars import *
 from constants import BOT_DATA
 from discord.ext import commands
@@ -27,19 +28,23 @@ bot: BOT = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready() -> None:
     print(console.COLORS.INFO + f"[{time.time():.2f}] {bot.user} is ready to go!")
 
-def main() -> None:
-    print(console.COLORS.INFO + f"[{time.time():.2f}] Launching")
-
+def greet() -> None:
     frame = console.Frame(rows=12)
     frame.register_text('Pokemon Fire Red Bot')
     frame.display()
     print(f"{'By Tathya Garg': ^{os.get_terminal_size().columns}}")
     frame.reset()
 
+def main() -> None:
+    print(console.COLORS.INFO + f"[{time.time():.2f}] Launching")
+
     load_cogs(client=bot)
+
     bot.run(BOT_DATA.TOKEN)
 
-#    utils.Utils(bot=bot).run()
 
 if __name__ == "__main__":
-    main()
+    greet()
+    threading.Thread(target=main).start()
+    utils.Utils(bot=bot).run()
+

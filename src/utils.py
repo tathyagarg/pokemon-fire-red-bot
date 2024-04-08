@@ -3,6 +3,16 @@ import console
 import pathlib
 from PIL import Image
 from global_vars import *
+from database import run_sql
+
+def error_suppress(func):
+    def inner(*args, **kwargs):
+        try:
+            func(*args, **kwargs)
+        except Exception as e:
+            print(f'Encountered error: {e}')
+    
+    return inner
 
 def int_validate(message: str, acceptable_range: range = None) -> int:
     while True:
@@ -41,18 +51,31 @@ class Utils:
             img.save(fp=here)
             print(f"Altered {assets_path}")
 
+    @error_suppress
     def load_cog(self) -> None:
         extension: str = console.input('Extension>>> ')
         self.bot.load_extension(extension)
 
+    @error_suppress
     def unload_cog(self) -> None:
         extension: str = console.input('Extension>>> ')
         self.bot.unload_extension(extension)
 
+    @error_suppress
     def reload_cog(self) -> None:
         extension: str = console.input('Extension>>> ')
         self.bot.unload_extension(extension)
         self.bot.load_extension(extension)
+
+    @error_suppress
+    def sql_injection(self) -> None:
+        sql: str = console.input('SQL>>> ')
+        res = run_sql(sql=sql)
+        print(res)
+
+    def list_cogs(self) -> None:
+        for i, ext in enumerate(self.bot.extensions, 1):
+            print(f"[{i}] {ext}")
 
     def run(self):
         frame = console.Frame(rows=10)
@@ -64,7 +87,9 @@ class Utils:
             'Load Cog': self.load_cog,
             'Unload Cog': self.unload_cog,
             'Reload Cog': self.reload_cog,
-            'Kill': quit
+            'List cogs': self.list_cogs,
+            'Flush': lambda: -1,
+            'Kill': 1,
         }
 
         print(console.COLORS.INFO)
@@ -73,4 +98,9 @@ class Utils:
 
         while True:
             choice = int_validate('>>> ', range(len(options)))-1
+            option = list(options)[choice]
+            if option == 'Kill':
+                break
             options[list(options)[choice]]()
+
+        return 0

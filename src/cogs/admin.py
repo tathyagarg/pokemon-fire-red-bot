@@ -38,20 +38,59 @@ class AdminCommands(commands.Cog):
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Test out the newest beta feature')
     @commands.check(is_tathya)
     async def new_feature(self, ctx: CTX) -> None:
-        msg: INTERACTION = await ctx.respond('abc')  # TODO: Add a default embed
+        msg: INTERACTION = await ctx.respond(embed=commons.dialogue_default_embed)  # TODO: Add a default embed
         d: dialogue.Dialogue = dialogue.Dialogue(
             msg_id=msg.id,
             displays=[
-                (data.PROFESSOR_OAK, 'a', None),
-                (data.PROFESSOR_OAK, 'b', commons.Input(
-                    '???',
-                    lambda value: database.update_field(
+                (data.PROFESSOR_OAK, 'Hello, there! Glad to meet you!', None),
+                (data.PROFESSOR_OAK, 'Welcome to the world of Pokémon!', None),
+                (data.PROFESSOR_OAK, 'My name is Oak.', None),
+                (data.PROFESSOR_OAK, 'People affectionately refer to me as the Pokémon Professor.', None),
+                (data.PROFESSOR_OAK, 'This world...', None),
+                (data.NIDORAN, '...is inhabited far and wide by creatures called Pokémon.', None),
+                (data.NIDORAN, 'For some people, Pokémon are pets. Others use them for battling.', None),
+                (data.NIDORAN, 'As for myself...', None),
+                (data.NIDORAN, 'I study Pokémon as a profession.', None),
+                (data.PROFESSOR_OAK, 'But first, tell me a little about yourself.', None),
+                (data.PROFESSOR_OAK, 'Now tell me.', None), (
+                    lambda: database.fetch_player_intro_sprite(uid=ctx.author.id), 
+                    'Let\'s begin with your name.',
+                    commons.Input(
+                        query='Are you a boy or a girl?',
+                        action=lambda gender: database.update_field(
+                            uid=ctx.author.id,
+                            field=DATABASE.IS_MALE,
+                            new_value=gender
+                        ),
+                        _filter=lambda value: (first in 'mb') if (first := value[0].lower()) in 'mfbg' else True,  # True signifies male (is_male)
+                        placeholder='Enter only "male", "female", "boy", or "girl"'
+                    )
+                ), (
+                    lambda: database.fetch_player_intro_sprite(uid=ctx.author.id),
+                    'Right... So your name is {}.',
+                    commons.Input(
+                        query='What is it?',
+                        action=lambda name: database.update_field(
+                            uid=ctx.author.id,
+                            field=DATABASE.USERNAME,
+                            new_value=name  
+                        ),
+                        placeholder='Enter your name here.'
+                    )
+                ), 
+                (data.BLUE, 'This is my grandson.', None),
+                (data.BLUE, 'He\'s been your rival since you both were babies.', None),
+                (data.BLUE, 'That\'s right! I remember him now! His name is {}!', commons.Input(
+                    query='...Erm, what was his name now?',
+                    action=lambda name: database.update_field(
                         uid=ctx.author.id,
-                        field=DATABASE.USERNAME,
-                        new_value=value                        
+                        field=DATABASE.OPPONENT,
+                        new_value=name
                     )
                 )),
-                (data.PROFESSOR_OAK, 'c', None)
+                (lambda: database.fetch_player_intro_sprite(uid=ctx.author.id), lambda: f"{database.request_field(uid=ctx.author.id, field=DATABASE.USERNAME)}!", None),
+                (lambda: database.fetch_player_intro_sprite(uid=ctx.author.id), 'Your very own Pokémon legend is about to unfold!', None),
+                (lambda: database.fetch_player_intro_sprite(uid=ctx.author.id), 'A world of dreams and adventures with Pokémon awaits! Let\'s go!', None),
             ]
         )
         await (await msg.original_response()).edit(view=d.paginator)

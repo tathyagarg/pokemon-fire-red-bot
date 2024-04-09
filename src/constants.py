@@ -21,13 +21,19 @@ class Database:
 
         self.PARTY = 'party'
         self.USERNAME = 'username'
+        self.OPPONENT = 'opponent'
+        self.LOCATION = 'location'
+        self.IS_MALE = 'gender'
 
         self.EMPTY_USER: dict[str, typing.Any] = {
             self.PARTY: [],
-            self.USERNAME: ''
+            self.USERNAME: '',
+            self.OPPONENT: '',
+            self.LOCATION: -1,
+            self.IS_MALE: -1
         }
 
-        self.FIELDS = [self.PARTY, self.USERNAME]
+        self.FIELDS = [self.PARTY, self.USERNAME, self.LOCATION, self.IS_MALE]
 
 class Colors:
     def __init__(self, **kwargs) -> None:

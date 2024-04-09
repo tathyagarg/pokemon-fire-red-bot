@@ -2,6 +2,7 @@ import json
 import pathlib
 import constants
 from global_vars import *
+import entities.data as data
 from constants import BOT_DATA
 
 DATA: constants.Database = BOT_DATA.DATABASE
@@ -45,3 +46,10 @@ def update_field(uid: int, field: str, new_value) -> None:
     original = request_data(uid=uid)
     original[field] = new_value
     dump_user_data(uid=uid, data=original)
+
+def fetch_player_intro_sprite(uid: int):
+    """
+        :return: Character object representing the player's chosen gender
+    """
+    is_male: bool = request_field(uid=uid, field=DATA.IS_MALE)
+    return data.RED if is_male else data.LEAF

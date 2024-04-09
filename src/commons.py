@@ -11,11 +11,19 @@ def check_registered_without_context(user: discord.User) -> bool:
     return database.check_user_exists(uid=user.id)
 
 class Input:
-    def __init__(self, query: str, action: typing.Callable) -> None:
-        self.query: str = query
-        self.action: typing.Callable = action
+    def __init__(self, query: str, action: typing.Callable, _filter: typing.Callable = None, placeholder: str = None) -> None:
+        self.query = query
+        self.action = action
+        self._filter = _filter or (lambda v: v)
+        self.placeholder = placeholder or ''
 
 class Character:
     def __init__(self, name: str, img: str) -> None:
-        self.name: str = name
-        self.img: str = img
+        self.name = name
+        self.img = img
+
+dialogue_default_embed = discord.Embed(
+    title='Press >',
+    description='Start the dialogue!',
+    color=BOT_DATA.COLORS.COLOR_PRIMARY
+)

@@ -340,3 +340,12 @@ LEECH_SEED: Move = Move(typing=Type.GRASS, category=MC.STATUS, PP=10, power=0, a
                   protect=True, mirror_move=True, kings_rock=False)
 
 PROFESSOR_OAK: Character = Character(name='Professor Oak', img='assets/characters/professor_oak.png')
+LEAF: Character = Character(name='Leaf', img='assets/characters/leaf.png')
+RED: Character = Character(name='Red', img='assets/characters/red.png')
+BLUE: Character = Character(name='Blue', img='assets/characters/blue.png')
+
+POKEMON_CHARACTERS: list[Character] = [
+    Character(name='Bulbasaur', img='assets/info_sprites/001_bulbasaur.png')
+]
+
+NIDORAN = Character(name='Nidoran F', img='assets/info_sprites/029_nidoran_f.png')  # placeholder

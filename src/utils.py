@@ -1,9 +1,9 @@
 import os
 import console
 import pathlib
+import database
 from PIL import Image
 from global_vars import *
-from database import run_sql
 
 def error_suppress(func):
     def inner(*args, **kwargs):
@@ -66,12 +66,6 @@ class Utils:
         extension: str = console.input('Extension>>> ')
         self.bot.unload_extension(extension)
         self.bot.load_extension(extension)
-
-    @error_suppress
-    def sql_injection(self) -> None:
-        sql: str = console.input('SQL>>> ')
-        res = run_sql(sql=sql)
-        print(res)
 
     def list_cogs(self) -> None:
         for i, ext in enumerate(self.bot.extensions, 1):

@@ -1,8 +1,8 @@
 import commons
 import discord
+import database
 import constants
 from global_vars import *
-from database import run_sql
 from constants import BOT_DATA
 from extensions import dialogue
 from discord.ext import commands
@@ -18,29 +18,15 @@ class AdminCommands(commands.Cog):
     def __init__(self, bot: BOT) -> None:
         self.bot: BOT = bot
 
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Run SQL commands on the users.sql file')
-    @commands.check(is_tathya)
-    async def sql(self, ctx: CTX, query: str, values: str = "") -> None:
-        values: tuple[str, ...] = values or tuple()
-        await ctx.respond(run_sql(sql=query, values=values))
-
-    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Delete all contents of the table, or reinitalize a new table')
-    @commands.check(is_tathya)
-    async def clear_table(self, ctx: CTX, new_table: str = "") -> None:
-        if new_table:
-            run_sql(sql='DROP TABLE {}'.format(DATABASE.DB_NAME))
-            run_sql(sql='CREATE TABLE {}'.format(new_table))
-        else:
-            run_sql(sql='DELETE FROM {}'.format(DATABASE.DB_NAME))
-        
-        await ctx.respond("Done!")
-
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Add a Pokemon from given instance data to the author\'s party')
     @commands.check(is_tathya)
     async def add_pokemon_to_party(self, ctx: CTX, instance_data: str) -> None:
-        result: str = run_sql(sql="SELECT {} FROM {} WHERE {}=?".format(DATABASE.PARTY, DATABASE.DB_NAME, DATABASE.USER_ID), values=(ctx.author.id,))[0][0]
-        new_party: str = (result + f'.<{instance_data}>').strip('.   ')
-        run_sql(sql="UPDATE {} SET {}=? WHERE {}=?".format(DATABASE.DB_NAME, DATABASE.PARTY, DATABASE.USER_ID), values=(new_party, ctx.author.id,))
+        database.update_field(
+            uid=ctx.author.id,
+            field=DATABASE.PARTY,
+            new_value=database.request_field(uid=ctx.author.id, field=DATABASE.PARTY) + [instance_data]
+        )
+
         await ctx.respond("Updated!")
 
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Create a pokemon with random stats')
@@ -59,9 +45,10 @@ class AdminCommands(commands.Cog):
                 (data.PROFESSOR_OAK, 'a', None),
                 (data.PROFESSOR_OAK, 'b', commons.Input(
                     '???',
-                    lambda value: run_sql(
-                        sql="UPDATE {} SET {} = ? WHERE {} = ?".format(DATABASE.DB_NAME, DATABASE.USE_NAME, DATABASE.USER_ID),
-                        values=(value, ctx.author.id)
+                    lambda value: database.update_field(
+                        uid=ctx.author.id,
+                        field=DATABASE.USERNAME,
+                        new_value=value                        
                     )
                 )),
                 (data.PROFESSOR_OAK, 'c', None)

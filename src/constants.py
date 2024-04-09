@@ -1,4 +1,5 @@
 import toml
+import typing
 import pathlib
 
 parent: pathlib.PosixPath = pathlib.Path(__file__).parents[1]  # parent directory of src
@@ -18,12 +19,15 @@ class Database:
     def __init__(self, **kwargs) -> None:
         self.DB_FILE: str = kwargs['DB_FILE']
 
-        self.DB_NAME: str = kwargs['DB_NAME']
-        self.USER_ID: str = kwargs['UID']
-        self.PARTY: str = kwargs['PARTY']
-        self.USE_NAME: str = kwargs['USE_NAME']
+        self.PARTY = 'party'
+        self.USERNAME = 'username'
 
-        self.FIELDS: list[str] = [self.USER_ID, self.PARTY, self.USE_NAME]
+        self.EMPTY_USER: dict[str, typing.Any] = {
+            self.PARTY: [],
+            self.USERNAME: ''
+        }
+
+        self.FIELDS = [self.PARTY, self.USERNAME]
 
 class Colors:
     def __init__(self, **kwargs) -> None:
@@ -35,6 +39,7 @@ class Colors:
 
 with open(file=config, mode='r') as f:
     data: dict[str, str | dict[str, str | int]] = toml.load(f)
+
     BOT_DATA: BotData = BotData(**data)
     BOT_DATA.DATABASE = Database(**data['DATABASE'])
     BOT_DATA.COLORS = Colors(**data['COLORS'])

@@ -1,16 +1,14 @@
 import typing
 import discord
+import database
 from global_vars import *
-from database import run_sql
 from constants import BOT_DATA
 
 def check_registered(ctx: CTX) -> bool:
-    result: list = run_sql("SELECT * FROM {} WHERE {} = ?".format(BOT_DATA.DATABASE.DB_NAME, BOT_DATA.DATABASE.USER_ID), (ctx.author.id,))
-    return result != []
+    return database.check_user_exists(uid=ctx.author.id)
 
 def check_registered_without_context(user: discord.User) -> bool:
-    result: list = run_sql("SELECT * FROM {} WHERE {} = ?".format(BOT_DATA.DATABASE.DB_NAME, BOT_DATA.DATABASE.USER_ID), (user.id,))
-    return result != []
+    return database.check_user_exists(uid=user.id)
 
 class Input:
     def __init__(self, query: str, action: typing.Callable) -> None:

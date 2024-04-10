@@ -31,7 +31,7 @@ class PaginationView(discord.ui.View):
 
         self.pages: list[tuple[Character, str, Callable | None]] = pages
         self.curr: int = 0
-        self.max: int = len(pages)
+        self.max: int = len(pages)-1
         self.msg_id: int = msg_id
 
         self.disable_buttons()

@@ -1,4 +1,5 @@
 import json
+import typing
 import pathlib
 import constants
 from global_vars import *
@@ -37,7 +38,7 @@ def dump_user_data(uid: int, data: dict) -> None:
     with open(DATABASE, 'w') as f:
         dump(original, f)
 
-def request_field(uid: int, field: str) -> None:
+def request_field(uid: int, field: str) -> typing.Any:
     with open(DATABASE) as f:
         data = json.load(f)
     return data[str(uid)][field]

@@ -4,6 +4,7 @@ import utils
 import console
 import discord
 import pathlib
+import argparse
 import threading
 from global_vars import *
 from constants import BOT_DATA
@@ -44,7 +45,14 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--without-shell', action='store_const', const=True, default=False)
+    without_shell = parser.parse_args().without_shell
+
     greet()
-    threading.Thread(target=main).start()
-    utils.Utils(bot=bot).run()
+    if not without_shell:
+        threading.Thread(target=main).start()
+        utils.Utils(bot=bot).run()
+    else:
+        main()
 

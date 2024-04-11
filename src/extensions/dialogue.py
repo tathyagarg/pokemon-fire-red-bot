@@ -26,20 +26,20 @@ class UserModal(discord.ui.Modal):
         self.stop()
 
 class PaginationView(discord.ui.View):
-    def __init__(self, msg_id: int, pages: list[tuple[Character, str, Callable | None]]) -> None:
+    def __init__(self, pages: list[tuple[Character, str, Callable | None]]) -> None:
         super().__init__()
 
         self.pages: list[tuple[Character, str, Callable | None]] = pages
         self.curr: int = 0
         self.max: int = len(pages)-1
-        self.msg_id: int = msg_id
 
         self.disable_buttons()
 
     def disable_buttons(self) -> None:
-        to_disable: list[str] = ['pages']
+        to_disable: list[str] = ['pages', 'destroy']
         if self.curr >= self.max:
             to_disable += ['>']
+            to_disable.remove('destroy')
 
         for button in self.children:
             if button.custom_id == 'pages':
@@ -98,7 +98,4 @@ class Dialogue:
     def __init__(self, msg_id: int, displays: list[tuple[Character, str, Callable | None]]) -> None:
         self.msg_id = msg_id
         self.displays = displays
-
-    @property
-    def paginator(self) -> PaginationView:
-        return PaginationView(msg_id=self.msg_id, pages=self.displays)
+        self.paginator = PaginationView(pages=self.displays)

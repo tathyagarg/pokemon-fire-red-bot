@@ -23,6 +23,8 @@ class Database:
         self.USERNAME = 'username'
         self.OPPONENT = 'opponent'
         self.LOCATION = 'location'
+        self.POSITION_X = 'position_x'
+        self.POSITION_Y = 'position_y'
         self.IS_MALE = 'gender'
 
         self.EMPTY_USER: dict[str, typing.Any] = {
@@ -30,10 +32,12 @@ class Database:
             self.USERNAME: '',
             self.OPPONENT: '',
             self.LOCATION: -1,
-            self.IS_MALE: -1
+            self.POSITION_X: -1,
+            self.POSITION_Y: -1,
+            self.IS_MALE: -1,
         }
 
-        self.FIELDS = [self.PARTY, self.USERNAME, self.LOCATION, self.IS_MALE]
+        self.FIELDS = [self.PARTY, self.USERNAME, self.LOCATION, self.POSITION_X, self.POSITION_Y, self.IS_MALE]
 
 class Colors:
     def __init__(self, **kwargs) -> None:

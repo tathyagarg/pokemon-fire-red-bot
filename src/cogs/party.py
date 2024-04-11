@@ -83,7 +83,10 @@ class Party(commands.Cog):
         embed.add_field(name='Held Item', value=('None' if not pokemon.held_item else f'{pokemon.held_item.emoji} {pokemon.held_item}'), inline=False)
         embed.set_thumbnail(url=target.display_avatar.url)
 
-        await ctx.respond(embed=embed)
+        file = discord.File(fp=f'assets/info_sprites/{pokemon.instance_of.pokedex_number:0>3}_{pokemon.instance_of.name.lower().replace(" ", "_")}.png', filename='output.png')
+        embed.set_image(url='attachment://output.png')
+
+        await ctx.respond(embed=embed, file=file)
 
 def setup(client: BOT) -> None:
     client.add_cog(cog=Party(bot=client))

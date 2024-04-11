@@ -90,7 +90,8 @@ class Game(commands.Cog):
             image = scene.SCENES[scene_index].image
 
             with PIL.Image.open(fp=image) as f:
-                with PIL.Image.open(fp=database)
+                with PIL.Image.open(fp=database):
+                    ...
 
             embed = discord.Embed(color=BOT_DATA.COLORS.COLOR_PRIMARY)
 

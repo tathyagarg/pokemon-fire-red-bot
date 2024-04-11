@@ -1,6 +1,6 @@
 from .move import Move
-from commons import Character
 from .abstracts import MoveCategory as MC
+from commons import Character, OverworldSprites
 from .abstracts import Type, Stat, Nature, Ability
 
 HARDY  : Nature = Nature(name='Hardy', up_stat=Stat.ATTACK, down_stat=Stat.ATTACK)
@@ -341,7 +341,12 @@ LEECH_SEED: Move = Move(typing=Type.GRASS, category=MC.STATUS, PP=10, power=0, a
 
 PROFESSOR_OAK: Character = Character(name='Professor Oak', img='assets/characters/professor_oak.png')
 LEAF: Character = Character(name='Leaf', img='assets/characters/leaf.png')
-RED: Character = Character(name='Red', img='assets/characters/red.png')
+RED: Character = Character(name='Red', img='assets/characters/red.png', overworld_sprites=OverworldSprites(
+    front=...,
+    right=...,
+    back=...,
+    left=...
+))
 BLUE: Character = Character(name='Blue', img='assets/characters/blue.png')
 
 POKEMON_CHARACTERS: list[Character] = [

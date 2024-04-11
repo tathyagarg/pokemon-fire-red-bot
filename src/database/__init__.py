@@ -5,5 +5,5 @@ from .dbhandler import (
     dump_user_data,
     request_field,
     update_field,
-    fetch_player_intro_sprite
+    fetch_player_sprite
 )

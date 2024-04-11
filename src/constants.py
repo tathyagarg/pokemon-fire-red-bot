@@ -14,6 +14,7 @@ class BotData:
         self.GUILD_IDS: list[int] = kwargs.get('GUILD_IDS', [])
         self.COLORS: Colors = kwargs.get('COLORS')
         self.DATABASE: Database = kwargs.get('DATABASE')
+        self.UNITS: int = 48
 
 class Database:
     def __init__(self, **kwargs) -> None:
@@ -22,22 +23,23 @@ class Database:
         self.PARTY = 'party'
         self.USERNAME = 'username'
         self.OPPONENT = 'opponent'
-        self.LOCATION = 'location'
+        self.PROGRESSION = 'location'
         self.POSITION_X = 'position_x'
         self.POSITION_Y = 'position_y'
+        self.POSITION = 'position'
         self.IS_MALE = 'gender'
 
         self.EMPTY_USER: dict[str, typing.Any] = {
             self.PARTY: [],
             self.USERNAME: '',
             self.OPPONENT: '',
-            self.LOCATION: -1,
+            self.PROGRESSION: -1,
             self.POSITION_X: -1,
             self.POSITION_Y: -1,
             self.IS_MALE: -1,
         }
 
-        self.FIELDS = [self.PARTY, self.USERNAME, self.LOCATION, self.POSITION_X, self.POSITION_Y, self.IS_MALE]
+        self.FIELDS = [self.PARTY, self.USERNAME, self.PROGRESSION, self.POSITION_X, self.POSITION_Y, self.IS_MALE]
 
 class Colors:
     def __init__(self, **kwargs) -> None:

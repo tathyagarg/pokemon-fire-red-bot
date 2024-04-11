@@ -1,11 +1,13 @@
+import PIL
+import PIL.Image
 import commons
 import database
 from entities import data
 from global_vars import *
 from constants import BOT_DATA
-from extensions import dialogue
 from discord.ext import commands
 from commons import check_registered
+from extensions import dialogue, scene
 
 DATABASE = BOT_DATA.DATABASE
 
@@ -32,7 +34,7 @@ def starting_dialogue(author_id: int) -> dialogue.Dialogue:
                     _filter=lambda value: (first in 'mb') if (first := value[0].lower()) in 'mfbg' else True,  # True signifies male (is_male)
                     placeholder='Enter only "male", "female", "boy", or "girl"'
                 )), (
-                lambda: database.fetch_player_intro_sprite(uid=author_id), 
+                lambda: database.fetch_player_sprite(uid=author_id), 
                 'Let\'s begin with your name.',
                 commons.Input(
                     query='What is it?',
@@ -45,7 +47,7 @@ def starting_dialogue(author_id: int) -> dialogue.Dialogue:
                     placeholder='Enter your name here.'
                 )
             ), (
-                lambda: database.fetch_player_intro_sprite(uid=author_id),
+                lambda: database.fetch_player_sprite(uid=author_id),
                 'Right... So your name is {}.',
                 None
             ), 
@@ -60,9 +62,9 @@ def starting_dialogue(author_id: int) -> dialogue.Dialogue:
                 _filter=str.title
             )),
             (data.BLUE, 'That\'s right! I remember him now! His name is {}!', None),
-            (lambda: database.fetch_player_intro_sprite(uid=author_id), lambda: f"{database.request_field(uid=author_id, field=DATABASE.USERNAME)}!", None),
-            (lambda: database.fetch_player_intro_sprite(uid=author_id), 'Your very own Pokémon legend is about to unfold!', None),
-            (lambda: database.fetch_player_intro_sprite(uid=author_id), 'A world of dreams and adventures with Pokémon awaits! Let\'s go!', None),
+            (lambda: database.fetch_player_sprite(uid=author_id), lambda: f"{database.request_field(uid=author_id, field=DATABASE.USERNAME)}!", None),
+            (lambda: database.fetch_player_sprite(uid=author_id), 'Your very own Pokémon legend is about to unfold!', None),
+            (lambda: database.fetch_player_sprite(uid=author_id), 'A world of dreams and adventures with Pokémon awaits! Let\'s go!', None),
         ]
     )
 
@@ -73,13 +75,27 @@ class Game(commands.Cog):
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
     @commands.check(check_registered)
     async def game(self, ctx: CTX) -> None:
-        user_location: int = database.request_field(uid=ctx.author.id, field=DATABASE.LOCATION)
+        user_location: int = database.request_field(uid=ctx.author.id, field=DATABASE.PROGRESSION)
         if user_location == -1:
             msg: INTERACTION = await ctx.respond(embed=commons.dialogue_default_embed)
             d = starting_dialogue(author_id=ctx.author.id)
             await (await msg.original_response()).edit(view=d.paginator)
-            database.update_field(uid=ctx.author.id, field=DATABASE.LOCATION, new_value=0)  # 0 because we know it's currently -1
+            database.update_field(uid=ctx.author.id, field=DATABASE.PROGRESSION, new_value=0)  # 0 because we know it's currently -1
         else:
+            uid: int = ctx.author.id
+
+            scene_index: int = database.request_field(uid=uid, field=DATABASE.PROGRESSION)
+            position: tuple[int, int] = database.request_field(uid=uid, field=DATABASE.POSITION)
+
+            image = scene.SCENES[scene_index].image
+
+            with PIL.Image.open(fp=image) as f:
+                with PIL.Image.open(fp=database)
+
+            embed = discord.Embed(color=BOT_DATA.COLORS.COLOR_PRIMARY)
+
+            embed.set_image('attachment://output.png')
+
             ctx.respond('WIP')
 
 def setup(client: BOT) -> None:

@@ -1,15 +1,4 @@
-import enum
-from extensions import dialogue
-
-class Direction(enum.Enum):
-    UP = 0
-    RIGHT = 1
-    DOWN = 2
-    LEFT = 3
-    UP_RIGHT = 4
-    UP_LEFT = 5
-    DOWN_RIGHT = 6
-    DOWN_LEFT = 7
+from commons import Direction
 
 class Scene:
     def __init__(
@@ -26,7 +15,7 @@ class Scene:
         self.walls = walls
         self.interactions = interactions
 
-scenes = [Scene(
+starting_room = Scene(
     image='assets/scenes/scene1.png',
     size=(11, 9),
     starting_position=(5, 6),
@@ -56,4 +45,8 @@ scenes = [Scene(
         (1, 7, Direction.UP),
     ],
     interactions={}
-)]
+)
+
+SCENES = [
+    starting_room
+]

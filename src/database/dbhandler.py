@@ -1,5 +1,6 @@
 import json
 import typing
+import commons
 import pathlib
 import constants
 from global_vars import *
@@ -41,6 +42,8 @@ def dump_user_data(uid: int, data: dict) -> None:
 def request_field(uid: int, field: str) -> typing.Any:
     with open(DATABASE) as f:
         data = json.load(f)
+    if field == DATA.POSITION:
+        return data[str(uid)][DATA.POSITION_X], data[str(uid)][DATA.POSITION_Y]
     return data[str(uid)][field]
 
 def update_field(uid: int, field: str, new_value) -> None:
@@ -48,7 +51,7 @@ def update_field(uid: int, field: str, new_value) -> None:
     original[field] = new_value
     dump_user_data(uid=uid, data=original)
 
-def fetch_player_intro_sprite(uid: int):
+def fetch_player_sprite(uid: int):
     """
         :return: Character object representing the player's chosen gender
     """

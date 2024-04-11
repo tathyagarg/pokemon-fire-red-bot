@@ -3,10 +3,9 @@ import discord
 import database
 import constants
 from global_vars import *
+from entities import pokemon
 from constants import BOT_DATA
-from extensions import dialogue
 from discord.ext import commands
-from entities import pokemon, data
 
 DATABASE: constants.Database = BOT_DATA.DATABASE
 
@@ -38,7 +37,7 @@ class AdminCommands(commands.Cog):
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS, description='Test out the newest beta feature')
     @commands.check(is_tathya)
     async def new_feature(self, ctx: CTX) -> None:
-        await ctx.respond(discord.Embed(color=BOT_DATA.COLORS.COLOR_PRIMARY, title='Nuh uh', description='Nothing\'s in the works ||as of now||'))
+        await ctx.respond(embed=discord.Embed(color=BOT_DATA.COLORS.COLOR_PRIMARY, title='Nuh uh', description='Nothing\'s in the works ||as of now||'))
 
 class CogManager(commands.Cog):
     def __init__(self, bot: BOT) -> None:

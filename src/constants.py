@@ -28,6 +28,7 @@ class Database:
         self.POSITION_Y = 'position_y'
         self.POSITION = 'position'
         self.IS_MALE = 'gender'
+        self.DIRECTION = 'direction'
 
         self.EMPTY_USER: dict[str, typing.Any] = {
             self.PARTY: [],
@@ -37,6 +38,7 @@ class Database:
             self.POSITION_X: -1,
             self.POSITION_Y: -1,
             self.IS_MALE: -1,
+            self.DIRECTION: 0
         }
 
         self.FIELDS = [self.PARTY, self.USERNAME, self.PROGRESSION, self.POSITION_X, self.POSITION_Y, self.IS_MALE]

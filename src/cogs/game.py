@@ -1,4 +1,4 @@
-import PIL
+import os
 import PIL.Image
 import commons
 import database
@@ -81,6 +81,8 @@ class Game(commands.Cog):
             d = starting_dialogue(author_id=ctx.author.id)
             await (await msg.original_response()).edit(view=d.paginator)
             database.update_field(uid=ctx.author.id, field=DATABASE.PROGRESSION, new_value=0)  # 0 because we know it's currently -1
+            database.update_field(uid=ctx.author.id, field=DATABASE.POSITION_X, new_value=scene.SCENES[0].starting_position[0])
+            database.update_field(uid=ctx.author.id, field=DATABASE.POSITION_Y, new_value=scene.SCENES[0].starting_position[1])
         else:
             uid: int = ctx.author.id
 
@@ -88,16 +90,21 @@ class Game(commands.Cog):
             position: tuple[int, int] = database.request_field(uid=uid, field=DATABASE.POSITION)
 
             image = scene.SCENES[scene_index].image
+            direction_idx: int = database.request_field(uid=uid, field=DATABASE.DIRECTION)
+            direction: commons.Direction = commons.Direction.fetch(idx=direction_idx)
 
-            with PIL.Image.open(fp=image) as f:
-                with PIL.Image.open(fp=database):
-                    ...
+            user_sprite_path: str = database.fetch_player_sprite(uid=uid).overworld_sprites.from_direction(direction=direction)
 
+            with PIL.Image.open(fp=image) as scene_img:
+                with PIL.Image.open(fp=user_sprite_path) as character:
+                    scene_img.paste(im=character, box=(BOT_DATA.UNITS * position[0], BOT_DATA.UNITS * position[1]), mask=character)
+                    scene_img.save(f'assets/temps/{uid}.png')
+            
+            file: discord.File = discord.File(fp=f'assets/temps/{uid}.png', filename='output.png')
             embed = discord.Embed(color=BOT_DATA.COLORS.COLOR_PRIMARY)
+            embed.set_image(url='attachment://output.png')
 
-            embed.set_image('attachment://output.png')
-
-            ctx.respond('WIP')
+            await ctx.respond(embed=embed, file=file)
 
 def setup(client: BOT) -> None:
     client.add_cog(cog=Game(bot=client))

@@ -8,6 +8,10 @@ class Basics(commands.Cog):
     def __init__(self, bot: BOT) -> None:
         self.bot: BOT = bot
 
+    @commands.slash_command()
+    async def ping(self, ctx: CTX) -> None:
+        await ctx.respond(f"Pong! The bot\'s latency sits as {self.bot.latency}")
+
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
     async def register(self, ctx: CTX) -> None:
         if database.check_user_exists(ctx.author.id):

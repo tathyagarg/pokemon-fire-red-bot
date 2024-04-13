@@ -12,14 +12,18 @@ def check_registered_without_context(user: discord.User) -> bool:
     return database.check_user_exists(uid=user.id)
 
 class Direction(enum.Enum):
-    UP = 0
+    BACK = 0
     RIGHT = 1
-    DOWN = 2
+    FRONT = 2
     LEFT = 3
-    UP_RIGHT = 4
-    UP_LEFT = 5
-    DOWN_RIGHT = 6
-    DOWN_LEFT = 7
+    BACK_RIGHT = 4
+    BACK_LEFT = 5
+    UP_RIGHT = 6
+    UP_LEFT = 7
+
+    @classmethod
+    def fetch(cls, idx: int) -> enum.Enum:
+        return cls._value2member_map_[idx]
 
 class Input:
     def __init__(self, query: str, action: typing.Callable, _filter: typing.Callable = None, placeholder: str = None) -> None:
@@ -42,11 +46,11 @@ class OverworldSprites:
             self.left
         ]
 
-    def from_direction(self, direction: Direction):
+    def from_direction(self, direction: Direction) -> str:
         return self.sprites[direction.value]
 
 class Character:
-    def __init__(self, name: str, img: str, overworld_sprites: OverworldSprites) -> None:
+    def __init__(self, name: str, img: str, overworld_sprites: OverworldSprites = None) -> None:
         self.name = name
         self.img = img
         self.overworld_sprites = overworld_sprites

@@ -10,7 +10,7 @@ class Basics(commands.Cog):
 
     @commands.slash_command()
     async def ping(self, ctx: CTX) -> None:
-        await ctx.respond(f"Pong! The bot\'s latency sits as {self.bot.latency}")
+        await ctx.respond(f"Pong! The bot\'s latency sits at {self.bot.latency:.2f}ms")
 
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
     async def register(self, ctx: CTX) -> None:

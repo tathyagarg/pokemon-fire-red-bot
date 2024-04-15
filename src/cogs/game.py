@@ -7,7 +7,7 @@ from global_vars import *
 from constants import BOT_DATA
 from discord.ext import commands
 from commons import check_registered
-from extensions import dialogue, scene
+from extensions import dialogue, scene, game
 
 DATABASE = BOT_DATA.DATABASE
 
@@ -85,8 +85,14 @@ class Game(commands.Cog):
             database.update_field(uid=ctx.author.id, field=DATABASE.POSITION_Y, new_value=scene.SCENES[0].starting_position[1])
         else:
             uid: int = ctx.author.id
+            result = await ctx.respond(embed=game.PRE_GAME_EMBED)
+            game_embed: discord.Embed = game.GameEmbed(uid=uid)
+            game_view: discord.View = game.GameView(uid=uid)
+            game_view.embed = game_embed
 
-            scene_index: int = database.request_field(uid=uid, field=DATABASE.PROGRESSION)
+            await result.edit_original_response(embed=game_embed, view=game_view, file=game_embed.file)
+
+"""            scene_index: int = database.request_field(uid=uid, field=DATABASE.PROGRESSION)
             position: tuple[int, int] = database.request_field(uid=uid, field=DATABASE.POSITION)
 
             image = scene.SCENES[scene_index].image
@@ -104,7 +110,7 @@ class Game(commands.Cog):
             embed = discord.Embed(color=BOT_DATA.COLORS.COLOR_PRIMARY)
             embed.set_image(url='attachment://output.png')
 
-            await ctx.respond(embed=embed, file=file)
+            await ctx.respond(embed=embed, file=file)"""
 
 def setup(client: BOT) -> None:
     client.add_cog(cog=Game(bot=client))

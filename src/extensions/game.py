@@ -2,7 +2,7 @@ import PIL
 import commons
 import discord
 import database
-from extensions import scene
+from extensions import scenes
 from commons import INTERACTION
 from constants import BOT_DATA
 
@@ -18,7 +18,7 @@ def make_image(uid: int) -> str:
     scene_index: int = database.request_field(uid=uid, field=DATABASE.PROGRESSION)
     position: tuple[int, int] = database.request_field(uid=uid, field=DATABASE.POSITION)
 
-    image = scene.SCENES[scene_index].image
+    image = scenes.SCENES[scene_index].image
     direction_idx: int = database.request_field(uid=uid, field=DATABASE.DIRECTION)
     direction: commons.Direction = commons.Direction.fetch(idx=direction_idx)
 
@@ -32,6 +32,14 @@ def make_image(uid: int) -> str:
             scene_img.save(fname)
     
     return fname
+
+def check_can_move(uid: int, direction: commons.Direction) -> bool:
+    x, y = database.request_field(uid=uid, field=DATABASE.POSITION)
+    scene_idx = database.request_field(uid=uid, field=DATABASE.PROGRESSION)
+
+    scene = scenes.SCENES[scene_idx]
+
+    return (x, y, direction) not in scene.walls
 
 class GameEmbed(discord.Embed):
     def __init__(self, uid: int) -> None:
@@ -53,7 +61,8 @@ class GameView(discord.ui.View):
 
     @discord.ui.button(emoji='⬆️', style=discord.ButtonStyle.green, row=0)
     async def up(self, _, interaction: INTERACTION):
-        database.update_field(uid=self.uid, field=DATABASE.POSITION_Y, new_value=database.request_field(uid=self.uid, field=DATABASE.POSITION_Y)-1)
+        if check_can_move(uid=self.uid, direction=commons.Direction.BACK):
+            database.update_field(uid=self.uid, field=DATABASE.POSITION_Y, new_value=database.request_field(uid=self.uid, field=DATABASE.POSITION_Y)-1)
         database.update_field(uid=self.uid, field=DATABASE.DIRECTION, new_value=commons.Direction.BACK.value)
         fname: str = make_image(uid=self.uid)
 

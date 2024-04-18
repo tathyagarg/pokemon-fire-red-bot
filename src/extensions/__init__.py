@@ -1,3 +1,3 @@
 from .dialogue import *
-from .scene import *
+from .scenes import *
 from .game import *

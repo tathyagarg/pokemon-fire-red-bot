@@ -7,7 +7,7 @@ from global_vars import *
 from constants import BOT_DATA
 from discord.ext import commands
 from commons import check_registered
-from extensions import dialogue, scene, game
+from extensions import dialogue, game, scenes
 
 DATABASE = BOT_DATA.DATABASE
 
@@ -81,8 +81,8 @@ class Game(commands.Cog):
             d = starting_dialogue(author_id=ctx.author.id)
             await (await msg.original_response()).edit(view=d.paginator)
             database.update_field(uid=ctx.author.id, field=DATABASE.PROGRESSION, new_value=0)  # 0 because we know it's currently -1
-            database.update_field(uid=ctx.author.id, field=DATABASE.POSITION_X, new_value=scene.SCENES[0].starting_position[0])
-            database.update_field(uid=ctx.author.id, field=DATABASE.POSITION_Y, new_value=scene.SCENES[0].starting_position[1])
+            database.update_field(uid=ctx.author.id, field=DATABASE.POSITION_X, new_value=scenes.SCENES[0].starting_position[0])
+            database.update_field(uid=ctx.author.id, field=DATABASE.POSITION_Y, new_value=scenes.SCENES[0].starting_position[1])
         else:
             uid: int = ctx.author.id
             result = await ctx.respond(embed=game.PRE_GAME_EMBED)

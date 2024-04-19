@@ -81,7 +81,8 @@ class GameView(discord.ui.View):
 
     @discord.ui.button(emoji='⬅️', style=discord.ButtonStyle.green, row=1)
     async def left(self, _, interaction: INTERACTION):
-        database.update_field(uid=self.uid, field=DATABASE.POSITION_X, new_value=database.request_field(uid=self.uid, field=DATABASE.POSITION_X)-1)
+        if check_can_move(uid=self.uid, direction=commons.Direction.LEFT):
+            database.update_field(uid=self.uid, field=DATABASE.POSITION_X, new_value=database.request_field(uid=self.uid, field=DATABASE.POSITION_X)-1)
         database.update_field(uid=self.uid, field=DATABASE.DIRECTION, new_value=commons.Direction.LEFT.value)
         fname: str = make_image(uid=self.uid)
 
@@ -94,7 +95,8 @@ class GameView(discord.ui.View):
 
     @discord.ui.button(emoji='➡️', style=discord.ButtonStyle.green, row=1)
     async def right(self, _, interaction: INTERACTION):
-        database.update_field(uid=self.uid, field=DATABASE.POSITION_X, new_value=database.request_field(uid=self.uid, field=DATABASE.POSITION_X)+1)
+        if check_can_move(uid=self.uid, direction=commons.Direction.RIGHT):
+            database.update_field(uid=self.uid, field=DATABASE.POSITION_X, new_value=database.request_field(uid=self.uid, field=DATABASE.POSITION_X)+1)
         database.update_field(uid=self.uid, field=DATABASE.DIRECTION, new_value=commons.Direction.RIGHT.value)
         fname: str = make_image(uid=self.uid)
 
@@ -113,7 +115,8 @@ class GameView(discord.ui.View):
 
     @discord.ui.button(emoji='⬇️', style=discord.ButtonStyle.green, row=2)
     async def down(self, _, interaction: INTERACTION):
-        database.update_field(uid=self.uid, field=DATABASE.POSITION_Y, new_value=database.request_field(uid=self.uid, field=DATABASE.POSITION_Y)+1)
+        if check_can_move(uid=self.uid, direction=commons.Direction.FRONT):
+            database.update_field(uid=self.uid, field=DATABASE.POSITION_Y, new_value=database.request_field(uid=self.uid, field=DATABASE.POSITION_Y)+1)
         database.update_field(uid=self.uid, field=DATABASE.DIRECTION, new_value=commons.Direction.FRONT.value)
         fname: str = make_image(uid=self.uid)
 

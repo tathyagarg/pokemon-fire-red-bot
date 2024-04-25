@@ -13,6 +13,17 @@ class Basics(commands.Cog):
         await ctx.respond(f"Pong! The bot\'s latency sits at {self.bot.latency:.2f}ms")
 
     @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
+    async def controls(self, ctx: CTX) -> None:
+        embed: discord.Embed = discord.Embed(
+            title='Controls',
+            color=BOT_DATA.COLORS.COLOR_PRIMARY
+        )
+
+        embed.add_field(name=':arrow_up: Arrows', value='Moves the main character. Also used to control data headings.')
+        embed.add_field(name='<:A_:1233048181735034910>', value='Used to confirm a choice, check things, chat, and scroll text.')
+        embed.add_field(name='<:B_:1233048178614603797>', value='Used to exit, cancel a choice, and cancel a mode.')
+
+    @commands.slash_command(guild_ids=BOT_DATA.GUILD_IDS)
     async def register(self, ctx: CTX) -> None:
         if database.check_user_exists(ctx.author.id):
             embed: discord.Embed = discord.Embed(

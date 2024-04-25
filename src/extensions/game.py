@@ -104,10 +104,10 @@ class GameView(discord.ui.View):
         self.embed.file = file
         await interaction.response.edit_message(embed=self.embed, file=file)
 
-    @discord.ui.button(label='A', style=discord.ButtonStyle.blurple, row=1)
+    @discord.ui.button(emoji='<:A_:1233048181735034910>', style=discord.ButtonStyle.blurple, row=1)
     async def button_a(self, _, __): ...
 
-    @discord.ui.button(label='B', style=discord.ButtonStyle.blurple, row=1)
+    @discord.ui.button(emoji='<:B_:1233048178614603797>', style=discord.ButtonStyle.blurple, row=1)
     async def button_b(self, _, __): ...
 
     @discord.ui.button(label='ㅤ', row=2)
